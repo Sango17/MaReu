@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_container"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
     <ImageView
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_margin="12dp"
         android:scaleType="fitXY"
-        tools:srcCompat="@drawable/ic_round_pink_24dp" />
+        android:src="@drawable/ic_round_pink_24dp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -23,9 +25,10 @@
             android:id="@+id/item_main_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_title"
             android:textStyle="bold"
-            android:text="Reunion A -  14h00 - Peach"/>
+            android:textColor="@color/black"
+            tools:text="Reunion A -  14h00 - Peach"/>
 
         <TextView
             android:id="@+id/item_contact_info"
@@ -33,8 +36,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="12sp"
-            android:text="maxime@lamzone.com, luc@lamzone.com, alex@lamzone.com"/>
+            android:textSize="@dimen/text_normal"
+            tools:text="maxime@lamzone.com, luc@lamzone.com, alex@lamzone.com"/>
 
     </LinearLayout>
 
@@ -43,6 +46,6 @@
         android:layout_width="28dp"
         android:layout_height="match_parent"
         android:layout_margin="12dp"
-        tools:srcCompat="@drawable/ic_delete_gray_24dp"/>
+        android:src="@drawable/ic_delete_gray_24dp"/>
     
 </LinearLayout>

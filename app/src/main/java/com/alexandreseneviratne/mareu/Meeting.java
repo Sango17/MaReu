@@ -10,9 +10,9 @@ public class Meeting {
     private String subject;
     private String hall;
     private String scheduleTime;
-    private ArrayList<String> participants;
+    private String participants;
 
-    public Meeting(int id, String subject, String hall, String scheduleTime, ArrayList<String> participants) {
+    public Meeting(int id, String subject, String hall, String scheduleTime, String participants) {
         this.id = id;
         this.subject = subject;
         this.hall = hall;
@@ -36,7 +36,7 @@ public class Meeting {
         return scheduleTime;
     }
 
-    public ArrayList<String> getParticipants() {
+    public String getParticipants() {
         return participants;
     }
 }

@@ -1,4 +1,45 @@
 <resources>
     <string name="app_name">MaReu</string>
     <string name="menu_item_filter">Filtre</string>
+    <string name="meeting_subject">Sujet de la réunion</string>
+    <string name="meeting_subject_sample">Ex: Réunion de la semaine</string>
+    <string name="meeting_hall_selection">Salle de réunion</string>
+    <string name="meeting_schedule_selection">Heure de réunion</string>
+    <string name="meeting_participants">Participants</string>
+    <string name="meeting_participants_sample">Ex: alexandre@lamzone.com, amanda@lamzone.com, etc.</string>
+
+    <string-array name="meeting_hall">
+        <item>Mario</item>
+        <item>Peach</item>
+        <item>Luigi</item>
+        <item>Toad</item>
+        <item>Bowser</item>
+        <item>Wario</item>
+        <item>Daisy</item>
+        <item>Yoshi</item>
+        <item>Sonic</item>
+        <item>Tails</item>
+    </string-array>
+
+    <string-array name="meeting_schedule">
+        <item>8h00</item>
+        <item>9h00</item>
+        <item>10h00</item>
+        <item>11h00</item>
+        <item>12h00</item>
+        <item>13h00</item>
+        <item>14h00</item>
+        <item>15h00</item>
+        <item>16h00</item>
+        <item>17h00</item>
+        <item>18h00</item>
+        <item>19h00</item>
+        <item>20h00</item>
+    </string-array>
+
+    <string name="item_list_title">%1$s - %2$s - %3$s</string>
+    <string name="add_meeting">Ajouter la réunion</string>
+    <string name="detail_toolbar">Détails de la réunion</string>
+    <string name="add_toolbar">Ajout d\'une réunion</string>
+
 </resources>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">24dp</dimen>
+    <dimen name="toolbar_title">22sp</dimen>
+    <dimen name="text_title">16sp</dimen>
+    <dimen name="text_normal">12sp</dimen>
+    <dimen name="default_normal">12dp</dimen>
+    <dimen name="add_button_margin">78dp</dimen>
 </resources>
