@@ -1,7 +1,6 @@
 package com.alexandreseneviratne.mareu.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -13,16 +12,20 @@ import com.alexandreseneviratne.mareu.ui.fragment.AddFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.DetailFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.ListFragment;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private FrameLayout fragmentContainer;
+    public ArrayList<Meeting> meetings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+        meetings = new ArrayList<>();
 
+        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
         if (fragmentContainer != null) {
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else

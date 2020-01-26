@@ -6,22 +6,16 @@ import java.util.ArrayList;
  * Created by Alexandre SENEVIRATNE on 1/15/2020.
  */
 public class Meeting {
-    private int id;
     private String subject;
     private String hall;
     private String scheduleTime;
     private String participants;
 
-    public Meeting(int id, String subject, String hall, String scheduleTime, String participants) {
-        this.id = id;
+    public Meeting(String subject, String hall, String scheduleTime, String participants) {
         this.subject = subject;
         this.hall = hall;
         this.scheduleTime = scheduleTime;
         this.participants = participants;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getSubject() {

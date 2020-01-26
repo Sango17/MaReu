@@ -55,6 +55,15 @@ public class ListFragment extends Fragment implements OnActionListener {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden) {
+            setMeetingListView();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
@@ -76,15 +85,6 @@ public class ListFragment extends Fragment implements OnActionListener {
         setToolbar(view);
         setFab(view);
 
-        Meeting meeting1 = new Meeting(1, "Alex", "Living room", "8h30", "Amanda, Alex");
-        Meeting meeting2 = new Meeting(2, "Amanda", "Living room", "8h30", "Alex, Amanda");
-
-        meetings.clear();
-
-        meetings.add(meeting1);
-        meetings.add(meeting2);
-
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         setMeetingListView();
 
@@ -99,7 +99,7 @@ public class ListFragment extends Fragment implements OnActionListener {
         setHasOptionsMenu(true);
 
         // Get the actionbar
-        AppCompatActivity actionBar= ((AppCompatActivity)getActivity());
+        AppCompatActivity actionBar = ((AppCompatActivity) getActivity());
         if (actionBar != null) {
             actionBar.setSupportActionBar(toolbar);
         }
@@ -118,6 +118,10 @@ public class ListFragment extends Fragment implements OnActionListener {
     }
 
     public void setMeetingListView() {
+        meetings.clear();
+
+        meetings.addAll(mainActivity.meetings);
+
         adapter = new MeetingsRecyclerViewAdapter(getContext(), meetings, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -134,7 +138,9 @@ public class ListFragment extends Fragment implements OnActionListener {
 
     @Override
     public void toDelete(Meeting selectedMeeting) {
-        meetings.remove(selectedMeeting);
+        mainActivity.meetings.remove(selectedMeeting);
         setMeetingListView();
     }
+
+
 }

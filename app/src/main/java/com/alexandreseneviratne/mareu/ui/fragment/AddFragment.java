@@ -1,21 +1,23 @@
 package com.alexandreseneviratne.mareu.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.alexandreseneviratne.mareu.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 
@@ -63,13 +65,6 @@ public class AddFragment extends Fragment {
             mainActivity.setSupportActionBar(toolbar);
             mainActivity.getSupportActionBar().setTitle("");
         }
-
-        toolBarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.removeFragment();
-            }
-        });
     }
 
     private void setView(View view) {
@@ -97,35 +92,56 @@ public class AddFragment extends Fragment {
     }
 
     private void setListeners() {
-        meetingHall.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        toolBarBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        meetingSchedule.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                mainActivity.removeFragment();
             }
         });
 
         meetingAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.removeFragment();
+                if (checkHallAvailability(meetingHall.getSelectedItem().toString(),
+                        meetingSchedule.getSelectedItem().toString())) {
+                    if (meetingSubject.getText().toString().isEmpty()||
+                            meetingParticipants.getText().toString().isEmpty()) {
+                        Toast.makeText(
+                                getContext(),
+                                "N'oubliez pas d'indiquer le sujet et/ou les noms des participants",
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Meeting newMeeting = new Meeting(
+                                meetingSubject.getText().toString(),
+                                meetingHall.getSelectedItem().toString(),
+                                meetingSchedule.getSelectedItem().toString(),
+                                meetingParticipants.getText().toString());
+
+                        mainActivity.meetings.add(newMeeting);
+
+                        mainActivity.removeFragment();
+                    }
+
+                } else {
+                    Toast.makeText(
+                            getContext(),
+                            "Désolé la salle de réunion est déja réservée.",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+
             }
         });
+    }
+
+    private Boolean checkHallAvailability(String hall, String schedule) {
+        for (Meeting meeting : mainActivity.meetings) {
+            if (hall.equals(meeting.getHall()) && schedule.equals(meeting.getScheduleTime())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
