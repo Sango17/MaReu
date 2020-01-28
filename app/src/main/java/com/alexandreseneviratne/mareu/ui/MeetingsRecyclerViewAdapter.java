@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexandreseneviratne.mareu.Meeting;
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.StringHelper;
+import com.alexandreseneviratne.mareu.Utils;
 
 import java.util.List;
 
@@ -42,9 +42,13 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
     public void onBindViewHolder(@NonNull MeetingsRecyclerViewAdapter.RecyclerViewHolder holder, int position) {
         final Meeting selectedMeeting = mMeetingList.get(position);
         holder.titleInfo.setText(
-                StringHelper.setMeetingListTitle(mContext,
+                Utils.setMeetingListTitle(mContext,
                         selectedMeeting.getSubject(),
-                        selectedMeeting.getScheduleTime(),
+                        Utils.setTimetoString(
+                                mContext,
+                                selectedMeeting.getScheduleTime().getHours(),
+                                selectedMeeting.getScheduleTime().getMinutes()
+                        ),
                         selectedMeeting.getHall())
         );
 

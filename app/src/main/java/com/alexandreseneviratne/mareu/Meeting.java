@@ -1,6 +1,5 @@
 package com.alexandreseneviratne.mareu;
 
-import java.util.ArrayList;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/15/2020.
@@ -8,10 +7,10 @@ import java.util.ArrayList;
 public class Meeting {
     private String subject;
     private String hall;
-    private String scheduleTime;
+    private Time scheduleTime;
     private String participants;
 
-    public Meeting(String subject, String hall, String scheduleTime, String participants) {
+    public Meeting(String subject, String hall, Time scheduleTime, String participants) {
         this.subject = subject;
         this.hall = hall;
         this.scheduleTime = scheduleTime;
@@ -26,7 +25,7 @@ public class Meeting {
         return hall;
     }
 
-    public String getScheduleTime() {
+    public Time getScheduleTime() {
         return scheduleTime;
     }
 

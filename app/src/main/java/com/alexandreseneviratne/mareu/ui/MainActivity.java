@@ -12,18 +12,13 @@ import com.alexandreseneviratne.mareu.ui.fragment.AddFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.DetailFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.ListFragment;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private FrameLayout fragmentContainer;
-    public ArrayList<Meeting> meetings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        meetings = new ArrayList<>();
 
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
         if (fragmentContainer != null) {

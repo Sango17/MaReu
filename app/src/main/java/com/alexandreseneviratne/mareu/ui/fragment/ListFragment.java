@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alexandreseneviratne.mareu.MainFilterDialog;
 import com.alexandreseneviratne.mareu.Meeting;
 import com.alexandreseneviratne.mareu.R;
+import com.alexandreseneviratne.mareu.di.DI;
+import com.alexandreseneviratne.mareu.service.FakeMeetingApiService;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.ui.MeetingsRecyclerViewAdapter;
 import com.alexandreseneviratne.mareu.ui.OnActionListener;
@@ -33,17 +37,20 @@ import java.util.List;
  */
 public class ListFragment extends Fragment implements OnActionListener {
     private MainActivity mainActivity;
-    private androidx.appcompat.widget.Toolbar toolbar;
+    private FakeMeetingApiService meetingApiService;
+
+    private Toolbar toolbar;
+
     private FloatingActionButton addFab;
     private RecyclerView recyclerView;
     private MeetingsRecyclerViewAdapter adapter;
-    List<Meeting> meetings = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mainActivity = (MainActivity) getActivity();
+        meetingApiService = DI.getService();
     }
 
     @Override
@@ -66,14 +73,20 @@ public class ListFragment extends Fragment implements OnActionListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Toast.makeText(getActivity(), "Filter clicked", Toast.LENGTH_SHORT).show();
+                selectFilter();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void selectFilter() {
+        MainFilterDialog dialog = new MainFilterDialog();
+        if (getFragmentManager() != null) {
+            dialog.show(getFragmentManager(), "MainFilterDialog");
         }
     }
 
@@ -118,11 +131,7 @@ public class ListFragment extends Fragment implements OnActionListener {
     }
 
     public void setMeetingListView() {
-        meetings.clear();
-
-        meetings.addAll(mainActivity.meetings);
-
-        adapter = new MeetingsRecyclerViewAdapter(getContext(), meetings, this);
+        adapter = new MeetingsRecyclerViewAdapter(getContext(), meetingApiService.getMeetings(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
@@ -138,7 +147,8 @@ public class ListFragment extends Fragment implements OnActionListener {
 
     @Override
     public void toDelete(Meeting selectedMeeting) {
-        mainActivity.meetings.remove(selectedMeeting);
+        meetingApiService.deleteMeeting(selectedMeeting);
+
         setMeetingListView();
     }
 

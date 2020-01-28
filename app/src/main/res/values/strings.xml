@@ -38,8 +38,15 @@
     </string-array>
 
     <string name="item_list_title">%1$s - %2$s - %3$s</string>
+    <string name="time_format">%1$sh%2$s</string>
+    <string name="minute_format">0%1$d</string>
     <string name="add_meeting">Ajouter la réunion</string>
     <string name="detail_toolbar">Détails de la réunion</string>
     <string name="add_toolbar">Ajout d\'une réunion</string>
+    <string name="filter_main_title">Voulez-vous filtrer la liste des reunions ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="by_hall">Par salle</string>
+    <string name="by_date">Par date</string>
+    <string name="add_meeting_date">Clicker pour selectionner l\'heure de reunion</string>
 
 </resources>

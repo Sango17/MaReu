@@ -1,7 +1,6 @@
 package com.alexandreseneviratne.mareu.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.alexandreseneviratne.mareu.Meeting;
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.StringHelper;
+import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 
 /**
@@ -25,6 +22,7 @@ import com.alexandreseneviratne.mareu.ui.MainActivity;
  */
 public class DetailFragment extends Fragment {
     private MainActivity mainActivity;
+
     private Toolbar toolbar;
     private ImageView toolBarBack;
 
@@ -78,9 +76,15 @@ public class DetailFragment extends Fragment {
         detailParticipants = view.findViewById(R.id.detail_meeting_participants);
 
         detailHall.setText(meetingDetail.getHall());
-        detailSchedule.setText(meetingDetail.getScheduleTime());
+        detailSchedule.setText(
+                Utils.setTimetoString(
+                        getContext(),
+                        meetingDetail.getScheduleTime().getHours(),
+                        meetingDetail.getScheduleTime().getMinutes()
+                )
+        );
         detailSubject.setText(meetingDetail.getSubject());
-        detailParticipants.setText( meetingDetail.getParticipants());
+        detailParticipants.setText(meetingDetail.getParticipants());
     }
 
 
