@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,19 +14,18 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:padding="16dp"
-            android:text="Filtrer par..."
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Par date..." />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/dialog_filter_spinner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_filter_title"
-            android:padding="16dp"
-            android:text="@string/filter_main_title"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:layout_below="@id/dialog_filter_title"
+            android:layout_margin="16dp"
+            android:padding="16dp" />
 
         <Button
             android:id="@+id/dialog_filter_cancel"
@@ -39,36 +39,19 @@
             android:padding="16dp"
             android:text="@string/cancel" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/dialog_filter_accept"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/dialog_filter_hall"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="16dp"
-                android:text="@string/by_hall"
-                android:textColor="@color/colorAccent" />
-
-            <Button
-                android:id="@+id/dialog_filter_schedule"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="16dp"
-                android:text="@string/by_hour"
-                android:textColor="@color/colorAccent" />
-
-        </LinearLayout>
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            android:text="@string/filter"
+            android:textColor="@color/colorAccent" />
 
     </RelativeLayout>
+
 </RelativeLayout>

@@ -7,8 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,20 +20,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alexandreseneviratne.mareu.MainFilterDialog;
 import com.alexandreseneviratne.mareu.Meeting;
 import com.alexandreseneviratne.mareu.R;
+import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.di.DI;
 import com.alexandreseneviratne.mareu.service.FakeMeetingApiService;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.ui.MeetingsRecyclerViewAdapter;
 import com.alexandreseneviratne.mareu.ui.OnActionListener;
+import com.alexandreseneviratne.mareu.ui.OnFilterListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/19/2020.
  */
-public class ListFragment extends Fragment implements OnActionListener {
+public class ListFragment extends Fragment
+        implements OnActionListener, OnFilterListener {
     private MainActivity mainActivity;
     private FakeMeetingApiService meetingApiService;
 
@@ -66,7 +66,7 @@ public class ListFragment extends Fragment implements OnActionListener {
         super.onHiddenChanged(hidden);
 
         if (!hidden) {
-            setMeetingListView();
+            // setMeetingListView(meetingApiService.getMeetings());
         }
     }
 
@@ -84,7 +84,7 @@ public class ListFragment extends Fragment implements OnActionListener {
     }
 
     private void selectFilter() {
-        MainFilterDialog dialog = new MainFilterDialog();
+        MainFilterDialog dialog = new MainFilterDialog(this);
         if (getFragmentManager() != null) {
             dialog.show(getFragmentManager(), "MainFilterDialog");
         }
@@ -99,8 +99,7 @@ public class ListFragment extends Fragment implements OnActionListener {
         setFab(view);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        setMeetingListView();
-
+        setMeetingListView(meetingApiService.getMeetings());
 
         return view;
     }
@@ -130,8 +129,8 @@ public class ListFragment extends Fragment implements OnActionListener {
         });
     }
 
-    public void setMeetingListView() {
-        adapter = new MeetingsRecyclerViewAdapter(getContext(), meetingApiService.getMeetings(), this);
+    private void setMeetingListView(List<Meeting> meetings) {
+        adapter = new MeetingsRecyclerViewAdapter(getContext(), meetings, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
@@ -148,9 +147,12 @@ public class ListFragment extends Fragment implements OnActionListener {
     @Override
     public void toDelete(Meeting selectedMeeting) {
         meetingApiService.deleteMeeting(selectedMeeting);
-
-        setMeetingListView();
+        adapter.notifyDataSetChanged();
     }
 
 
+    @Override
+    public void setFilteredList(String filterType, int selectedItemPosition) {
+        setMeetingListView(Utils.getFilteredList(filterType,selectedItemPosition, meetingApiService.getMeetings()));
+    }
 }

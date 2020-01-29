@@ -17,24 +17,23 @@
         <item>Wario</item>
         <item>Daisy</item>
         <item>Yoshi</item>
-        <item>Sonic</item>
-        <item>Tails</item>
+        <item>Donkey</item>
+        <item>Diddy</item>
     </string-array>
 
     <string-array name="meeting_schedule">
-        <item>8h00</item>
-        <item>9h00</item>
-        <item>10h00</item>
-        <item>11h00</item>
-        <item>12h00</item>
-        <item>13h00</item>
-        <item>14h00</item>
-        <item>15h00</item>
-        <item>16h00</item>
-        <item>17h00</item>
-        <item>18h00</item>
-        <item>19h00</item>
-        <item>20h00</item>
+        <item>8h00 – 9h00</item>
+        <item>9h00 – 10h00</item>
+        <item>10h00 – 11h00</item>
+        <item>11h00 – 12h00</item>
+        <item>12h00 – 13h00</item>
+        <item>13h00 – 14h00</item>
+        <item>14h00 – 15h00</item>
+        <item>15h00 – 16h00</item>
+        <item>16h00 – 17h00</item>
+        <item>17h00 – 18h00</item>
+        <item>18h00 – 19h00</item>
+        <item>19h00 – 20h00</item>
     </string-array>
 
     <string name="item_list_title">%1$s - %2$s - %3$s</string>
@@ -46,7 +45,9 @@
     <string name="filter_main_title">Voulez-vous filtrer la liste des reunions ?</string>
     <string name="cancel">Annuler</string>
     <string name="by_hall">Par salle</string>
-    <string name="by_date">Par date</string>
+    <string name="by_hour">Par heure</string>
     <string name="add_meeting_date">Clicker pour selectionner l\'heure de reunion</string>
+    <string name="filter">Filtrer</string>
+    <string name="dialog_filter_title">Par %1$s…</string>
 
 </resources>

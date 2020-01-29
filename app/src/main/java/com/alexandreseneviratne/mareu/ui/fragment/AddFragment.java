@@ -165,7 +165,6 @@ public class AddFragment extends Fragment {
                             Toast.LENGTH_SHORT)
                             .show();
                 }
-
             }
         });
     }
