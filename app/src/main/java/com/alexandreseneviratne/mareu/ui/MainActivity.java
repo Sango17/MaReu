@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.ui.fragment.AddFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.DetailFragment;

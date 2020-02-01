@@ -1,4 +1,4 @@
-package com.alexandreseneviratne.mareu;
+package com.alexandreseneviratne.mareu.ui.dialog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.alexandreseneviratne.mareu.R;
+import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.ui.OnFilterListener;
-import com.alexandreseneviratne.mareu.ui.fragment.ListFragment;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/27/2020.

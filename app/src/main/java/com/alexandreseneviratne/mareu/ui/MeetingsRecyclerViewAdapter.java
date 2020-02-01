@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.Utils;
 

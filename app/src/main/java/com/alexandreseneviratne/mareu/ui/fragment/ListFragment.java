@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alexandreseneviratne.mareu.MainFilterDialog;
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.ui.dialog.MainFilterDialog;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.di.DI;

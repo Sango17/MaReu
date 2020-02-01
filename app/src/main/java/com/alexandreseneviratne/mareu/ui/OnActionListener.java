@@ -1,6 +1,6 @@
 package com.alexandreseneviratne.mareu.ui;
 
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.model.Meeting;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/22/2020.

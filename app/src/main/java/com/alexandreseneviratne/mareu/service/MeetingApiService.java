@@ -1,6 +1,6 @@
 package com.alexandreseneviratne.mareu.service;
 
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.model.Meeting;
 
 import java.util.List;
 

@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.alexandreseneviratne.mareu.Meeting;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.ui.MainActivity;

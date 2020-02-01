@@ -2,6 +2,9 @@ package com.alexandreseneviratne.mareu;
 
 import android.content.Context;
 
+import com.alexandreseneviratne.mareu.model.Meeting;
+import com.alexandreseneviratne.mareu.model.Time;
+
 import java.util.ArrayList;
 import java.util.List;
 

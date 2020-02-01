@@ -1,4 +1,4 @@
-package com.alexandreseneviratne.mareu;
+package com.alexandreseneviratne.mareu.model;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/28/2020.
