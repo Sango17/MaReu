@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,10 +29,15 @@ public class DetailFragment extends Fragment {
 
     private Meeting meetingDetail;
 
+    private LinearLayout detailBlock;
     private TextView detailHall;
-    private TextView detailSchedule;
+    private TextView detailScheduleDate;
+    private TextView detailScheduleTime;
     private TextView detailSubject;
     private TextView detailParticipants;
+    private TextView detailInfo;
+
+    private Boolean isDetailAvailable = false;
 
 
     @Override
@@ -51,10 +57,18 @@ public class DetailFragment extends Fragment {
 
         return view;
     }
-
+    /**
+     * Set DetailFragment's toolbar
+     *
+     * @param view DetailFragment's view
+     */
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolBarBack = (ImageView) view.findViewById(R.id.navigate_up);
+        if (mainActivity.mIsDualPane) {
+            toolBarBack.setVisibility(View.GONE);
+        }
+
         // Get the actionbar
         if (mainActivity != null) {
             mainActivity.setSupportActionBar(toolbar);
@@ -69,26 +83,58 @@ public class DetailFragment extends Fragment {
         });
     }
 
+    /**
+     * Display meeting details in the view
+     *
+     * @param view DetailFragment's view
+     */
     private void setView(View view) {
         detailHall = view.findViewById(R.id.detail_meeting_hall);
-        detailSchedule = view.findViewById(R.id.detail_meeting_schedule);
+        detailScheduleDate = view.findViewById(R.id.detail_meeting_schedule_date);
+        detailScheduleTime = view.findViewById(R.id.detail_meeting_schedule_time);
         detailSubject = view.findViewById(R.id.detail_meeting_subject);
         detailParticipants = view.findViewById(R.id.detail_meeting_participants);
+        detailBlock = view.findViewById(R.id.detail_meeting_block);
+        detailInfo = view.findViewById(R.id.detail_meeting_info);
 
-        detailHall.setText(meetingDetail.getHall());
-        detailSchedule.setText(
-                Utils.setTimetoString(
-                        getContext(),
-                        meetingDetail.getScheduleTime().getHours(),
-                        meetingDetail.getScheduleTime().getMinutes()
-                )
-        );
-        detailSubject.setText(meetingDetail.getSubject());
-        detailParticipants.setText(meetingDetail.getParticipants());
+        if (meetingDetail != null && isDetailAvailable) {
+            detailBlock.setVisibility(View.VISIBLE);
+            detailHall.setText(meetingDetail.getHall());
+            detailScheduleDate.setText(
+                    Utils.setDateToString(
+                            getContext(),
+                            meetingDetail.getScheduleDate().getDay(),
+                            meetingDetail.getScheduleDate().getMonth(),
+                            meetingDetail.getScheduleDate().getYear()
+                    )
+            );
+            detailScheduleTime.setText(
+                    Utils.setTimetoString(
+                            getContext(),
+                            meetingDetail.getScheduleTime().getHours(),
+                            meetingDetail.getScheduleTime().getMinutes()
+                    )
+            );
+            detailSubject.setText(meetingDetail.getSubject());
+            detailParticipants.setText(meetingDetail.getParticipants());
+
+            detailInfo.setVisibility(View.GONE);
+        } else {
+            detailBlock.setVisibility(View.GONE);
+            detailInfo.setVisibility(View.VISIBLE);
+        }
     }
 
 
-    public void setMeetingDetail(Meeting selectedMeeting) {
-        meetingDetail = selectedMeeting;
+    /**
+     * Set the selected meeting
+     *
+     * @param selectedMeeting
+     */
+    public void setMeetingDetail(@Nullable Meeting selectedMeeting) {
+        if (selectedMeeting != null) {
+            meetingDetail = selectedMeeting;
+            isDetailAvailable = true;
+        }
     }
 }

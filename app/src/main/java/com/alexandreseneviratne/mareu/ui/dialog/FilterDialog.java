@@ -1,6 +1,7 @@
 package com.alexandreseneviratne.mareu.ui.dialog;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.model.Date;
 import com.alexandreseneviratne.mareu.ui.OnFilterListener;
 
 /**
@@ -22,6 +24,7 @@ import com.alexandreseneviratne.mareu.ui.OnFilterListener;
  */
 public class FilterDialog extends DialogFragment {
     private String filterType;
+    private Date selectedDate;
 
     private TextView titleTextView;
     private Spinner spinner;
@@ -29,9 +32,14 @@ public class FilterDialog extends DialogFragment {
     private Button cancelButton;
     private OnFilterListener mListener;
 
-    public FilterDialog(String filterType, OnFilterListener listener) {
+    public FilterDialog(String filterType, OnFilterListener listener, Date selectedDate) {
         this.filterType = filterType;
         this.mListener = listener;
+
+        if (selectedDate != null) {
+            this.selectedDate = selectedDate;
+            Log.d("Alex Test", String.valueOf(selectedDate.getDay()));
+        }
     }
 
     @Nullable
@@ -46,6 +54,11 @@ public class FilterDialog extends DialogFragment {
         return view;
     }
 
+    /**
+     * Set FilterDialog's view
+     *
+     * @param view FilterDialog's view
+     */
     private void setView(View view) {
         titleTextView = (TextView) view.findViewById(R.id.dialog_filter_title);
         spinner = (Spinner) view.findViewById(R.id.dialog_filter_spinner);
@@ -55,6 +68,11 @@ public class FilterDialog extends DialogFragment {
         titleTextView.setText(Utils.setFilterDialogTitle(getContext(), filterType));
     }
 
+    /**
+     * Set the spinner according to the filterType
+     *
+     * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     */
     private void setSpinner(String filterType){
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> meetingHallAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -65,11 +83,14 @@ public class FilterDialog extends DialogFragment {
         spinner.setAdapter(meetingHallAdapter);
     }
 
+    /**
+     * Initialize click listeners
+     */
     private void initListeners() {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.setFilteredList(filterType, spinner.getSelectedItemPosition());
+                mListener.setFilteredList(filterType, spinner.getSelectedItemPosition(), selectedDate);
                 getDialog().dismiss();
             }
         });

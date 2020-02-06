@@ -1,5 +1,6 @@
 package com.alexandreseneviratne.mareu.ui.fragment;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -20,12 +22,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
+import com.alexandreseneviratne.mareu.model.Date;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.model.Time;
 import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.di.DI;
-import com.alexandreseneviratne.mareu.service.FakeMeetingApiService;
+import com.alexandreseneviratne.mareu.service.MeetingApiService;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 
 import java.util.Calendar;
@@ -35,20 +38,25 @@ import java.util.Calendar;
  */
 public class AddFragment extends Fragment {
     private MainActivity mainActivity;
-    private FakeMeetingApiService meetingApiService;
+    private MeetingApiService meetingApiService;
 
     private Toolbar toolbar;
     private ImageView toolBarBack;
 
     private Spinner meetingHall;
-    private TextView meetingSchedule;
+    private TextView meetingScheduleDate;
+    private TextView meetingScheduleTime;
     private EditText meetingSubject;
     private EditText meetingParticipants;
     private Button meetingAddButton;
 
-    private Time setSchedule;
+    private Date setScheduleDate;
+    private Time setScheduleTime;
 
     private Calendar calendar = Calendar.getInstance();
+    private final int year = calendar.get(Calendar.YEAR);
+    private final int month = calendar.get(Calendar.MONTH);
+    private final int day = calendar.get(Calendar.DAY_OF_MONTH);
     private final int hour = calendar.get(Calendar.HOUR_OF_DAY);
     private final int minute = calendar.get(Calendar.MINUTE);
 
@@ -72,6 +80,11 @@ public class AddFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Set AddFragment's toolbar
+     *
+     * @param view AddFragment's view
+     */
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolBarBack = (ImageView) view.findViewById(R.id.navigate_up);
@@ -80,14 +93,31 @@ public class AddFragment extends Fragment {
             mainActivity.setSupportActionBar(toolbar);
             mainActivity.getSupportActionBar().setTitle("");
         }
+
+        toolBarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.removeFragment();
+            }
+        });
     }
 
+    /**
+     * Set AddFragment's view
+     *
+     * @param view AddFragment's view
+     */
     private void setView(View view) {
         meetingHall = (Spinner) view.findViewById(R.id.add_meeting_hall);
-        meetingSchedule = (TextView) view.findViewById(R.id.add_meeting_schedule);
+        meetingScheduleDate = (TextView) view.findViewById(R.id.add_meeting_schedule_date);
+        meetingScheduleTime = (TextView) view.findViewById(R.id.add_meeting_schedule_time);
         meetingSubject = (EditText) view.findViewById(R.id.add_meeting_subject);
         meetingParticipants = (EditText) view.findViewById(R.id.add_meeting_participants);
         meetingAddButton = (Button) view.findViewById(R.id.add_meeting_button);
+
+        if (mainActivity.mIsDualPane) {
+            toolBarBack.setVisibility(View.GONE);
+        }
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> meetingHallAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -98,25 +128,43 @@ public class AddFragment extends Fragment {
         meetingHall.setAdapter(meetingHallAdapter);
     }
 
+    /**
+     * Set all the click listeners
+     */
     private void setListeners() {
-        toolBarBack.setOnClickListener(new View.OnClickListener() {
+        meetingScheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.removeFragment();
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        setScheduleDate = new Date(dayOfMonth, month, year);
+                        meetingScheduleDate.setText(
+                                Utils.setDateToString(
+                                        mainActivity.getApplicationContext(),
+                                        setScheduleDate.getDay(),
+                                        setScheduleDate.getMonth(),
+                                        setScheduleDate.getYear())
+                        );
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
             }
         });
 
-        meetingSchedule.setOnClickListener(new View.OnClickListener() {
+        meetingScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hour, int minute) {
-                        setSchedule = new Time(hour, minute);
-
-                        Log.d("Alex Test", String.valueOf((hour*60) + minute));
-
-                        meetingSchedule.setText(Utils.setTimetoString(getContext(), setSchedule.getHours(), setSchedule.getMinutes()));
+                        setScheduleTime = new Time(hour, minute);
+                        meetingScheduleTime.setText(
+                                Utils.setTimetoString(
+                                        mainActivity.getApplicationContext(),
+                                        setScheduleTime.getHours(),
+                                        setScheduleTime.getMinutes())
+                        );
                     }
                 }, hour, minute, android.text.format.DateFormat.is24HourFormat(getContext()));
                 timePickerDialog.show();
@@ -126,46 +174,55 @@ public class AddFragment extends Fragment {
         meetingAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Utils.isOnOpeningHours(setSchedule)) {
-                    if (Utils.checkHallAvailability(
-                            meetingHall.getSelectedItem().toString(),
-                            setSchedule,
-                            meetingApiService.getMeetings()))
-                    {
-                        if (meetingSubject.getText().toString().isEmpty() ||
-                                meetingParticipants.getText().toString().isEmpty()) {
-                            Toast.makeText(
-                                    getContext(),
-                                    "N'oubliez pas d'indiquer le sujet et/ou les noms des participants",
-                                    Toast.LENGTH_SHORT)
-                                    .show();
-                        } else {
-
-                            Meeting newMeeting = new Meeting(
-                                    meetingSubject.getText().toString(),
-                                    meetingHall.getSelectedItem().toString(),
-                                    setSchedule,
-                                    meetingParticipants.getText().toString());
-
-                            meetingApiService.addMeeting(newMeeting);
-
-                            mainActivity.removeFragment();
-                        }
-                    } else {
-                        Toast.makeText(
-                                getContext(),
-                                "Désolé la salle de réunion est déja réservée.",
-                                Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                } else {
-                    Toast.makeText(
-                            getContext(),
-                            "Les horaires d\'ouverture sont entre 8h00 et 20h00, veuillez choisir un autre horaire.",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
+                addMeetingProcess();
             }
         });
+    }
+
+    private void addMeetingProcess() {
+        if (Utils.isOnOpeningHours(setScheduleTime)) {
+            if (Utils.checkHallAvailability(
+                    meetingHall.getSelectedItem().toString(),
+                    setScheduleDate,
+                    setScheduleTime,
+                    meetingApiService.getMeetings())) {
+                if (meetingSubject.getText().toString().isEmpty() ||
+                        meetingParticipants.getText().toString().isEmpty()) {
+                    Toast.makeText(
+                            getContext(),
+                            "N'oubliez pas d'indiquer le sujet et/ou les noms des participants",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Meeting newMeeting = new Meeting(
+                            meetingSubject.getText().toString(),
+                            meetingHall.getSelectedItem().toString(),
+                            setScheduleDate,
+                            setScheduleTime,
+                            meetingParticipants.getText().toString());
+
+                    meetingApiService.addMeeting(newMeeting);
+
+                    mainActivity.toList();
+                    mainActivity.removeFragment();
+
+                    if (mainActivity.mIsDualPane) {
+                        mainActivity.toDetail(meetingApiService.getMeetings().get(0));
+                    }
+                }
+            } else {
+                Toast.makeText(
+                        getContext(),
+                        "Désolé la salle de réunion est déja réservée.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        } else {
+            Toast.makeText(
+                    getContext(),
+                    "Les horaires d\'ouverture sont entre 8h00 et 20h00, veuillez choisir un autre horaire.",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 }

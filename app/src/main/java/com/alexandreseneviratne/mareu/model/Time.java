@@ -4,6 +4,7 @@ package com.alexandreseneviratne.mareu.model;
  * Created by Alexandre SENEVIRATNE on 1/28/2020.
  */
 public class Time {
+
     private int hour;
     private int minute;
 

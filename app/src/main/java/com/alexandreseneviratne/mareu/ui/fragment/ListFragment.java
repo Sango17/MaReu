@@ -2,27 +2,26 @@ package com.alexandreseneviratne.mareu.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alexandreseneviratne.mareu.model.Date;
+import com.alexandreseneviratne.mareu.service.MeetingApiService;
 import com.alexandreseneviratne.mareu.ui.dialog.MainFilterDialog;
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
 import com.alexandreseneviratne.mareu.Utils;
 import com.alexandreseneviratne.mareu.di.DI;
-import com.alexandreseneviratne.mareu.service.FakeMeetingApiService;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.ui.MeetingsRecyclerViewAdapter;
 import com.alexandreseneviratne.mareu.ui.OnActionListener;
@@ -37,9 +36,12 @@ import java.util.List;
 public class ListFragment extends Fragment
         implements OnActionListener, OnFilterListener {
     private MainActivity mainActivity;
-    private FakeMeetingApiService meetingApiService;
+    private MeetingApiService meetingApiService;
 
     private Toolbar toolbar;
+    private TextView toolBarTitle;
+    private ImageView toolBarFilter;
+    private ImageView toolBarFilterClose;
 
     private FloatingActionButton addFab;
     private RecyclerView recyclerView;
@@ -54,39 +56,12 @@ public class ListFragment extends Fragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflates wanted menu
-        inflater.inflate(R.menu.menu_main, menu);
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        // TODO: call apiService and create a method that reset itself if needed
 
         if (!hidden) {
-            // setMeetingListView(meetingApiService.getMeetings());
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                selectFilter();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void selectFilter() {
-        MainFilterDialog dialog = new MainFilterDialog(this);
-        if (getFragmentManager() != null) {
-            dialog.show(getFragmentManager(), "MainFilterDialog");
+            setMeetingListView(meetingApiService.getMeetings());
         }
     }
 
@@ -104,19 +79,46 @@ public class ListFragment extends Fragment
         return view;
     }
 
+    /**
+     * Set ListFragment's toolbar
+     *
+     * @param view ListFragment's view
+     */
     private void setToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-
-        // Notice there is a menu
-        setHasOptionsMenu(true);
+        toolBarTitle = (TextView) view.findViewById(R.id.toolbar_title);
+        toolBarFilter = (ImageView) view.findViewById(R.id.navigate_filter);
+        toolBarFilterClose = (ImageView) view.findViewById(R.id.navigate_filter_close);
 
         // Get the actionbar
-        AppCompatActivity actionBar = ((AppCompatActivity) getActivity());
-        if (actionBar != null) {
-            actionBar.setSupportActionBar(toolbar);
+        if (mainActivity != null) {
+            mainActivity.setSupportActionBar(toolbar);
+            toolbar.setTitle("");
         }
+        toolBarTitle.setText(getString(R.string.main_title));
+
+        toolBarFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectFilter();
+            }
+        });
+
+        toolBarFilterClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolBarTitle.setText(getString(R.string.main_title));
+                setFilterButton();
+                setMeetingListView(meetingApiService.getMeetings());
+            }
+        });
     }
 
+    /**
+     * Set the Floating Action Button in order to create a new meeting reservation
+     *
+     * @param view ListFragment's view
+     */
     private void setFab(View view) {
         addFab = (FloatingActionButton) view.findViewById(R.id.fab_add);
         addFab.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +131,11 @@ public class ListFragment extends Fragment
         });
     }
 
+    /**
+     * Set the list of meetings into the RecyclerView
+     *
+     * @param meetings list of meetings which will be displayed in the RecyclerView
+     */
     private void setMeetingListView(List<Meeting> meetings) {
         adapter = new MeetingsRecyclerViewAdapter(getContext(), meetings, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -137,6 +144,21 @@ public class ListFragment extends Fragment
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Display a dialog in order to filter the meeting list by date or by hall
+     */
+    private void selectFilter() {
+        MainFilterDialog dialog = new MainFilterDialog(this);
+        if (getFragmentManager() != null) {
+            dialog.show(getFragmentManager(), "MainFilterDialog");
+        }
+    }
+
+    /**
+     * Display the selected meeting via DetailFragment
+     *
+     * @param selectedMeeting
+     */
     @Override
     public void toDetail(Meeting selectedMeeting) {
         if (mainActivity != null) {
@@ -144,15 +166,60 @@ public class ListFragment extends Fragment
         }
     }
 
+    /**
+     * Delete the selected fragment and refresh the RecyclerView
+     *
+     * @param selectedMeeting
+     */
     @Override
     public void toDelete(Meeting selectedMeeting) {
         meetingApiService.deleteMeeting(selectedMeeting);
+        if (mainActivity.mIsDualPane) {
+            mainActivity.toDetail(null);
+        }
+
         adapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * Display the filtered liss of meetings in RecyclerView and modify the toolbar
+     *
+     * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     * @param selectedItemPosition of the spinner
+     * @param selectedDate
+     */
     @Override
-    public void setFilteredList(String filterType, int selectedItemPosition) {
-        setMeetingListView(Utils.getFilteredList(filterType,selectedItemPosition, meetingApiService.getMeetings()));
+    public void setFilteredList(String filterType, int selectedItemPosition, Date selectedDate) {
+        setMeetingListView(Utils.getFilteredList(filterType, selectedItemPosition, meetingApiService.getMeetings(), selectedDate));
+
+        setFilteredToolBar(filterType);
+    }
+
+    /**
+     * Set the Toolbar when the list of meetings is filtered
+     *
+     * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     */
+    private void setFilteredToolBar(String filterType) {
+        if (filterType.equals(Utils.FILTER_TYPE_DATE)) {
+            toolBarTitle.setText(getString(R.string.filter_date));
+        } else if (filterType.equals(Utils.FILTER_TYPE_HALL)) {
+            toolBarTitle.setText(getString(R.string.filter_hall));
+        }
+
+        setFilterButton();
+    }
+
+    /**
+     * Set Toolbar buttons
+     */
+    private void setFilterButton() {
+        if (toolBarFilter.getVisibility() == View.VISIBLE) {
+            toolBarFilter.setVisibility(View.GONE);
+            toolBarFilterClose.setVisibility(View.VISIBLE);
+        } else {
+            toolBarFilter.setVisibility(View.VISIBLE);
+            toolBarFilterClose.setVisibility(View.GONE);
+        }
     }
 }

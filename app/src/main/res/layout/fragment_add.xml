@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -17,119 +17,153 @@
             android:id="@+id/navigate_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_24dp"/>
+            android:src="@drawable/ic_arrow_back_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:text="@string/add_toolbar"
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title"
-            android:textStyle="bold"
-            android:text="@string/add_toolbar"/>
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/meeting_hall_selection"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_title" />
-
-        <Spinner
-            android:id="@+id/add_meeting_hall"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_hall_selection"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/meeting_schedule_selection"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_title" />
+                <Spinner
+                    android:id="@+id/add_meeting_hall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/add_meeting_schedule"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_meeting_date"/>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_schedule_date_selection"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/meeting_subject"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_title" />
+                <TextView
+                    android:id="@+id/add_meeting_schedule_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_meeting_date" />
 
-        <EditText
-            android:id="@+id/add_meeting_subject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/meeting_subject_sample"
-            android:textSize="@dimen/text_normal"
-            android:maxLines="1"
-            android:scrollHorizontally="true"/>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_schedule_time_selection"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/meeting_participants"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_title" />
+                <TextView
+                    android:id="@+id/add_meeting_schedule_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_meeting_time" />
 
-        <EditText
-            android:id="@+id/add_meeting_participants"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/meeting_participants_sample"
-            android:textSize="@dimen/text_normal"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:scrollHorizontally="true"/>
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-    <Button
-        android:id="@+id/add_meeting_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/add_button_margin"
-        android:text="@string/add_meeting"
-        style="@style/Widget.AppCompat.Button.Colored" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_subject"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/add_meeting_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/meeting_subject_sample"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textSize="@dimen/text_normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_participants"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/add_meeting_participants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/meeting_participants_sample"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textSize="@dimen/text_normal" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_meeting_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_button_margin"
+                android:text="@string/add_meeting" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

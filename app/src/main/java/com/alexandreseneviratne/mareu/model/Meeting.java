@@ -7,12 +7,14 @@ package com.alexandreseneviratne.mareu.model;
 public class Meeting {
     private String subject;
     private String hall;
+    private Date scheduleDate;
     private Time scheduleTime;
     private String participants;
 
-    public Meeting(String subject, String hall, Time scheduleTime, String participants) {
+    public Meeting(String subject, String hall, Date scheduleDate, Time scheduleTime, String participants) {
         this.subject = subject;
         this.hall = hall;
+        this.scheduleDate = scheduleDate;
         this.scheduleTime = scheduleTime;
         this.participants = participants;
     }
@@ -23,6 +25,10 @@ public class Meeting {
 
     public String getHall() {
         return hall;
+    }
+
+    public Date getScheduleDate() {
+        return scheduleDate;
     }
 
     public Time getScheduleTime() {
