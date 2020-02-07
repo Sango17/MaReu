@@ -15,9 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.utils.FilterHelper;
 import com.alexandreseneviratne.mareu.model.Date;
-import com.alexandreseneviratne.mareu.ui.OnFilterListener;
+import com.alexandreseneviratne.mareu.ui.listener.OnFilterListener;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/29/2020.
@@ -65,7 +65,7 @@ public class FilterDialog extends DialogFragment {
         acceptButton = (Button) view.findViewById(R.id.dialog_filter_accept);
         cancelButton = (Button) view.findViewById(R.id.dialog_filter_cancel);
 
-        titleTextView.setText(Utils.setFilterDialogTitle(getContext(), filterType));
+        titleTextView.setText(FilterHelper.setFilterDialogTitle(getContext(), filterType));
     }
 
     /**
@@ -76,7 +76,7 @@ public class FilterDialog extends DialogFragment {
     private void setSpinner(String filterType){
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> meetingHallAdapter = ArrayAdapter.createFromResource(getContext(),
-                (filterType.equals(Utils.FILTER_TYPE_HALL))? R.array.meeting_hall : R.array.meeting_schedule, android.R.layout.simple_spinner_item);
+                (filterType.equals(FilterHelper.FILTER_TYPE_HALL))? R.array.meeting_hall : R.array.meeting_schedule, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         meetingHallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner

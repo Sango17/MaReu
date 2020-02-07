@@ -1,4 +1,4 @@
-package com.alexandreseneviratne.mareu.ui;
+package com.alexandreseneviratne.mareu.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.ui.listener.OnActionListener;
+import com.alexandreseneviratne.mareu.utils.DateHelper;
+import com.alexandreseneviratne.mareu.utils.StringHelper;
 
 import java.util.List;
 
 /**
  * Created by Alexandre SENEVIRATNE on 1/19/2020.
  */
-public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRecyclerViewAdapter.RecyclerViewHolder> {
+public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRecyclerViewAdapter.ViewHolder> {
     private Context mContext;
     private List<Meeting> mMeetingList;
     private OnActionListener mListener;
@@ -33,18 +35,18 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
 
     @NonNull
     @Override
-    public MeetingsRecyclerViewAdapter.RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_meeting, parent, false);
-        return new MeetingsRecyclerViewAdapter.RecyclerViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MeetingsRecyclerViewAdapter.RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Meeting selectedMeeting = mMeetingList.get(position);
         holder.titleInfo.setText(
-                Utils.setMeetingListTitle(mContext,
+                StringHelper.setMeetingListTitle(mContext,
                         selectedMeeting.getSubject(),
-                        Utils.setTimetoString(
+                        DateHelper.setTimetoString(
                                 mContext,
                                 selectedMeeting.getScheduleTime().getHours(),
                                 selectedMeeting.getScheduleTime().getMinutes()
@@ -52,7 +54,7 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
                         selectedMeeting.getHall())
         );
 
-        holder.textInfo.setText(selectedMeeting.getParticipants());
+        holder.textInfo.setText(StringHelper.getParticipantsDetail(selectedMeeting.getParticipants()));
 
         holder.itemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,13 +76,13 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
         return mMeetingList.size();
     }
 
-    class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout itemContainer;
         TextView titleInfo;
         TextView textInfo;
         ImageView trashButton;
 
-        RecyclerViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             itemContainer = (LinearLayout) itemView.findViewById(R.id.item_container);

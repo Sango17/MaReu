@@ -5,15 +5,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="175dp">
+        android:layout_height="@dimen/dialog_height">
 
         <TextView
             android:id="@+id/dialog_filter_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="16dp"
-            android:text="Filtrer par..."
+            android:padding="@dimen/default_big"
+            android:text="@string/dialog_title_main_sample"
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title"
             android:textStyle="bold" />
@@ -22,10 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dialog_filter_title"
-            android:padding="16dp"
+            android:padding="@dimen/default_big"
             android:text="@string/filter_main_title"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="@dimen/dialog_text" />
 
         <Button
             android:id="@+id/dialog_filter_cancel"
@@ -36,7 +36,7 @@
             android:layout_alignParentBottom="true"
             android:clickable="true"
             android:focusable="true"
-            android:padding="16dp"
+            android:padding="@dimen/default_big"
             android:text="@string/cancel" />
 
         <LinearLayout
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="16dp"
+                android:padding="@dimen/default_big"
                 android:text="@string/by_hall"
                 android:textColor="@color/colorAccent" />
 
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="16dp"
+                android:padding="@dimen/default_big"
                 android:text="@string/by_hour"
                 android:textColor="@color/colorAccent" />
 

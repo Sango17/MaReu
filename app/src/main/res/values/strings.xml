@@ -1,16 +1,25 @@
 <resources>
     <string name="app_name">MaReu</string>
 
-    <string name="menu_item_filter">Filtre</string>
-
+    // Title
     <string name="meeting_subject">Sujet de la réunion</string>
-    <string name="meeting_subject_sample">Ex: Réunion de la semaine</string>
     <string name="meeting_hall_selection">Salle de réunion</string>
     <string name="meeting_schedule_date_selection">Date de reunion</string>
-    <string name="meeting_schedule_time_selection">Heure de réunion</string>
+    <string name="meeting_schedule_time_selection">Heure de réunion (une reunion dure environ 45min)</string>
     <string name="meeting_participants">Participants</string>
-    <string name="meeting_participants_sample">Ex: alexandre@lamzone.com, amanda@lamzone.com, etc.</string>
 
+    // Sample
+    <string name="meeting_hall_sample">Mario</string>
+    <string name="meeting_date_sample">01/01/2020</string>
+    <string name="meeting_time_sample">7h</string>
+    <string name="meeting_participants_sample">Ex: alexandre@lamzone.com</string>
+    <string name="meeting_subject_sample">Ex: Réunion de la semaine</string>
+    <string name="item_list_title_sample">Reunion A -  14h00 - Peach</string>
+    <string name="item_list_participants_sample">maxime@lamzone.com, luc@lamzone.com, alex@lamzone.com</string>
+    <string name="dialog_title_main_sample">Filtrer par...</string>
+    <string name="dialog_title_date_sample">Par date...</string>
+
+    // Spinner
     <string-array name="meeting_hall">
         <item>Mario</item>
         <item>Peach</item>
@@ -39,29 +48,41 @@
         <item>19h00 – 20h00</item>
     </string-array>
 
+    // String format
     <string name="item_list_title">%1$s - %2$s - %3$s</string>
     <string name="date_format">%1$s/%2$s/%3$s</string>
     <string name="time_format">%1$sh%2$s</string>
     <string name="with_zero_format">0%1$d</string>
 
-    <string name="add_meeting">Ajouter la réunion</string>
+
+    // Toolbar Title
+    <string name="main_title">MaReu</string>
     <string name="detail_toolbar">Détails de la réunion</string>
     <string name="add_toolbar">Ajout d\'une réunion</string>
 
+    // Button
+    <string name="add_meeting">Ajouter la réunion</string>
+    <string name="add_meeting_date">Appuyer pour selectionner la date de la reunion</string>
+    <string name="add_meeting_time">Appuyer pour selectionner l\'heure de la reunion</string>
+
+    // Filter
     <string name="filter_main_title">Voulez-vous filtrer la liste des reunions ?</string>
+
     <string name="cancel">Annuler</string>
     <string name="by_hall">Par salle</string>
-    <string name="by_hour">Par heure</string>
+    <string name="by_hour">Par date</string>
 
-    <string name="add_meeting_time">Clicker pour selectionner l\'heure de reunion</string>
     <string name="filter">Filtrer</string>
-    <string name="filter_date">Filtre par date</string>
-    <string name="filter_hall">Filtre par salle</string>
-
+    <string name="filter_date">Filtre: %1$s %2$s</string>
+    <string name="filter_hall">Filtre par salle: %1$s</string>
 
     <string name="dialog_filter_title">Par %1$s…</string>
 
-    <string name="main_title">MaReu</string>
-
-    <string name="add_meeting_date">Clicker pour selection la date de la reunion</string>
+    // Warning
+    <string name="warning_not_email">Ceci n\'est pas une adresse email</string>
+    <string name="warning_add_email">Veuillez ajouter une adresse email</string>
+    <string name="warning_subject_participants">N\'oubliez pas d\'indiquer le sujet et/ou les noms des participants</string>
+    <string name="warning_hall_not_free">Désolé la salle de réunion est déja réservée</string>
+    <string name="warning_meeting_opening">Les horaires d\'ouverture sont entre 8h00 et 20h00.</string>
+    <string name="warning_empty_list">Veuillez selectionner ou creer une reservation d'une salle de reunion</string>
 </resources>

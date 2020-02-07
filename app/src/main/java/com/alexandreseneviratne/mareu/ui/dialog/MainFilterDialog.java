@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.utils.FilterHelper;
 import com.alexandreseneviratne.mareu.model.Date;
-import com.alexandreseneviratne.mareu.ui.OnFilterListener;
+import com.alexandreseneviratne.mareu.ui.listener.OnFilterListener;
 
 import java.util.Calendar;
 
@@ -59,7 +59,7 @@ public class MainFilterDialog extends DialogFragment {
         hallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FilterDialog dialog = new FilterDialog(Utils.FILTER_TYPE_HALL, mListener, null);
+                FilterDialog dialog = new FilterDialog(FilterHelper.FILTER_TYPE_HALL, mListener, null);
                 if (getFragmentManager() != null) {
                     dialog.show(getFragmentManager(), "FilterDialogHall");
                 }
@@ -83,7 +83,7 @@ public class MainFilterDialog extends DialogFragment {
 
                         Date setScheduleDate = new Date(dayOfMonth, month, year);
 
-                        FilterDialog dialog = new FilterDialog(Utils.FILTER_TYPE_DATE, mListener, setScheduleDate);
+                        FilterDialog dialog = new FilterDialog(FilterHelper.FILTER_TYPE_DATE, mListener, setScheduleDate);
                         if (getFragmentManager() != null) {
                             dialog.show(getFragmentManager(), "FilterDialogDate");
                         }

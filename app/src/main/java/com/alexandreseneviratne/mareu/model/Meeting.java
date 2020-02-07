@@ -1,6 +1,8 @@
 package com.alexandreseneviratne.mareu.model;
 
 
+import java.util.ArrayList;
+
 /**
  * Created by Alexandre SENEVIRATNE on 1/15/2020.
  */
@@ -9,9 +11,9 @@ public class Meeting {
     private String hall;
     private Date scheduleDate;
     private Time scheduleTime;
-    private String participants;
+    private ArrayList<String> participants;
 
-    public Meeting(String subject, String hall, Date scheduleDate, Time scheduleTime, String participants) {
+    public Meeting(String subject, String hall, Date scheduleDate, Time scheduleTime, ArrayList<String> participants) {
         this.subject = subject;
         this.hall = hall;
         this.scheduleDate = scheduleDate;
@@ -35,7 +37,7 @@ public class Meeting {
         return scheduleTime;
     }
 
-    public String getParticipants() {
+    public ArrayList<String> getParticipants() {
         return participants;
     }
 }

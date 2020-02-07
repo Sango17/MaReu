@@ -20,14 +20,17 @@ import com.alexandreseneviratne.mareu.service.MeetingApiService;
 import com.alexandreseneviratne.mareu.ui.dialog.MainFilterDialog;
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.utils.DateHelper;
+import com.alexandreseneviratne.mareu.utils.FilterHelper;
 import com.alexandreseneviratne.mareu.di.DI;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
-import com.alexandreseneviratne.mareu.ui.MeetingsRecyclerViewAdapter;
-import com.alexandreseneviratne.mareu.ui.OnActionListener;
-import com.alexandreseneviratne.mareu.ui.OnFilterListener;
+import com.alexandreseneviratne.mareu.ui.adapter.MeetingsRecyclerViewAdapter;
+import com.alexandreseneviratne.mareu.ui.listener.OnActionListener;
+import com.alexandreseneviratne.mareu.ui.listener.OnFilterListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +61,6 @@ public class ListFragment extends Fragment
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        // TODO: call apiService and create a method that reset itself if needed
 
         if (!hidden) {
             setMeetingListView(meetingApiService.getMeetings());
@@ -182,29 +184,41 @@ public class ListFragment extends Fragment
     }
 
     /**
-     * Display the filtered liss of meetings in RecyclerView and modify the toolbar
+     * Display the filtered list of meetings in RecyclerView and modify the toolbar
      *
-     * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     * @param filterType           (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
      * @param selectedItemPosition of the spinner
      * @param selectedDate
      */
     @Override
     public void setFilteredList(String filterType, int selectedItemPosition, Date selectedDate) {
-        setMeetingListView(Utils.getFilteredList(filterType, selectedItemPosition, meetingApiService.getMeetings(), selectedDate));
+        setMeetingListView(FilterHelper.getFilteredList(filterType, selectedItemPosition, meetingApiService.getMeetings(), selectedDate));
 
-        setFilteredToolBar(filterType);
+        setFilteredToolBar(filterType, selectedItemPosition, selectedDate);
     }
 
     /**
      * Set the Toolbar when the list of meetings is filtered
      *
-     * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     * @param filterType           (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
+     * @param selectedItemPosition position of the spinner
+     * @param selectedDate         Date
      */
-    private void setFilteredToolBar(String filterType) {
-        if (filterType.equals(Utils.FILTER_TYPE_DATE)) {
-            toolBarTitle.setText(getString(R.string.filter_date));
-        } else if (filterType.equals(Utils.FILTER_TYPE_HALL)) {
-            toolBarTitle.setText(getString(R.string.filter_hall));
+    private void setFilteredToolBar(String filterType, int selectedItemPosition, @Nullable Date selectedDate) {
+        if (filterType.equals(FilterHelper.FILTER_TYPE_DATE)) {
+            String[] filteredScheduleList = getResources().getStringArray(R.array.meeting_schedule);
+            ArrayList<String> scheduleList = new ArrayList<>();
+            Collections.addAll(scheduleList, filteredScheduleList);
+
+            toolBarTitle.setText(
+                    getContext().getResources().getString(
+                            R.string.filter_date,
+                            DateHelper.setDateToString(getContext(), selectedDate.getDay(), selectedDate.getMonth(), selectedDate.getYear()),
+                            scheduleList.get(selectedItemPosition)
+                    )
+            );
+        } else if (filterType.equals(FilterHelper.FILTER_TYPE_HALL)) {
+            toolBarTitle.setText(getString(R.string.filter_hall, FilterHelper.getHallFilter(selectedItemPosition)));
         }
 
         setFilterButton();

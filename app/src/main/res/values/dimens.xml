@@ -4,6 +4,20 @@
     <dimen name="toolbar_title">22sp</dimen>
     <dimen name="text_title">16sp</dimen>
     <dimen name="text_normal">12sp</dimen>
-    <dimen name="default_normal">12dp</dimen>
     <dimen name="add_button_margin">78dp</dimen>
+    <dimen name="dialog_text">18sp</dimen>
+
+    <dimen name="default_small">4dp</dimen>
+    <dimen name="default_normal">12dp</dimen>
+    <dimen name="default_big">16dp</dimen>
+    <dimen name="default_extra_big">32dp</dimen>
+
+    <dimen name="margin_minus_small">-4dp</dimen>
+
+    <dimen name="empty_message_padding">28dp</dimen>
+
+    <dimen name="item_list_circle">56dp</dimen>
+    <dimen name="item_list_trash_width">28dp</dimen>
+
+    <dimen name="dialog_height">175dp</dimen>
 </resources>

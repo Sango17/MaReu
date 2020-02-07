@@ -1,4 +1,4 @@
-package com.alexandreseneviratne.mareu.ui;
+package com.alexandreseneviratne.mareu.ui.listener;
 
 import com.alexandreseneviratne.mareu.model.Date;
 

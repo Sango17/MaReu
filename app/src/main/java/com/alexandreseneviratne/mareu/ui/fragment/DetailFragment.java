@@ -15,7 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
-import com.alexandreseneviratne.mareu.Utils;
+import com.alexandreseneviratne.mareu.utils.DateHelper;
+import com.alexandreseneviratne.mareu.utils.StringHelper;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 
 /**
@@ -57,6 +58,7 @@ public class DetailFragment extends Fragment {
 
         return view;
     }
+
     /**
      * Set DetailFragment's toolbar
      *
@@ -101,7 +103,7 @@ public class DetailFragment extends Fragment {
             detailBlock.setVisibility(View.VISIBLE);
             detailHall.setText(meetingDetail.getHall());
             detailScheduleDate.setText(
-                    Utils.setDateToString(
+                    DateHelper.setDateToString(
                             getContext(),
                             meetingDetail.getScheduleDate().getDay(),
                             meetingDetail.getScheduleDate().getMonth(),
@@ -109,14 +111,14 @@ public class DetailFragment extends Fragment {
                     )
             );
             detailScheduleTime.setText(
-                    Utils.setTimetoString(
+                    DateHelper.setTimetoString(
                             getContext(),
                             meetingDetail.getScheduleTime().getHours(),
                             meetingDetail.getScheduleTime().getMinutes()
                     )
             );
             detailSubject.setText(meetingDetail.getSubject());
-            detailParticipants.setText(meetingDetail.getParticipants());
+            detailParticipants.setText(StringHelper.getParticipantsDetail(meetingDetail.getParticipants()));
 
             detailInfo.setVisibility(View.GONE);
         } else {

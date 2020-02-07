@@ -36,7 +36,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp">
+        android:layout_margin="@dimen/default_big">
 
         <LinearLayout
             android:id="@+id/detail_meeting_block"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_normal"
                     android:layout_marginEnd="@dimen/default_normal"
-                    tools:text="Mario" />
+                    tools:text="@string/meeting_hall_sample" />
 
             </LinearLayout>
 
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="@dimen/default_normal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_normal"
                 android:layout_marginEnd="@dimen/default_normal"
-                tools:text="01/01/2020" />
+                tools:text="@string/meeting_date_sample" />
 
         </LinearLayout>
 
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="@dimen/default_normal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_normal"
                     android:layout_marginEnd="@dimen/default_normal"
-                    tools:text="7h" />
+                    tools:text="@string/meeting_time_sample" />
 
             </LinearLayout>
 
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="@dimen/default_normal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_normal"
                     android:layout_marginEnd="@dimen/default_normal"
-                    tools:text="Que va t-on manger ?" />
+                    tools:text="@string/meeting_subject_sample" />
 
             </LinearLayout>
 
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="@dimen/default_normal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -171,9 +171,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Veuillez selectionner ou creer une reservation d'une salle de reunion"
+            android:text="@string/warning_empty_list"
             android:textAlignment="center"
-            android:padding="28dp"
+            android:padding="@dimen/empty_message_padding"
             android:visibility="visible"/>
 
     </androidx.cardview.widget.CardView>
