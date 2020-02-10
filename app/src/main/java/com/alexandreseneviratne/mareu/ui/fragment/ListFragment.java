@@ -75,7 +75,7 @@ public class ListFragment extends Fragment
         setToolbar(view);
         setFab(view);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
         setMeetingListView(meetingApiService.getMeetings());
 
         return view;

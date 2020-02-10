@@ -84,5 +84,5 @@
     <string name="warning_subject_participants">N\'oubliez pas d\'indiquer le sujet et/ou les noms des participants</string>
     <string name="warning_hall_not_free">Désolé la salle de réunion est déja réservée</string>
     <string name="warning_meeting_opening">Les horaires d\'ouverture sont entre 8h00 et 20h00.</string>
-    <string name="warning_empty_list">Veuillez selectionner ou creer une reservation d'une salle de reunion</string>
+    <string name="warning_empty_list">Veuillez selectionner ou creer une reservation d\'une salle de reunion</string>
 </resources>
