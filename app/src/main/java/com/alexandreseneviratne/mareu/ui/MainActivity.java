@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.alexandreseneviratne.mareu.di.DI;
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.R;
+import com.alexandreseneviratne.mareu.service.MeetingApiService;
 import com.alexandreseneviratne.mareu.ui.fragment.AddFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.DetailFragment;
 import com.alexandreseneviratne.mareu.ui.fragment.ListFragment;
@@ -17,6 +19,7 @@ import com.alexandreseneviratne.mareu.ui.fragment.ListFragment;
 public class MainActivity extends AppCompatActivity {
     private FrameLayout fragmentContainer;
     private FrameLayout fragmentDualPaneContainer;
+    public MeetingApiService meetingApiService;
     public Boolean mIsDualPane;
 
     @Override
@@ -34,8 +37,18 @@ public class MainActivity extends AppCompatActivity {
             if (savedInstanceState != null) {
                 return;
             }
+
+            meetingApiService = DI.getService();
+
             toList();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        meetingApiService = DI.getService();
     }
 
     /**

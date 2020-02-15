@@ -55,7 +55,9 @@ public class ListFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         mainActivity = (MainActivity) getActivity();
-        meetingApiService = DI.getService();
+        if (mainActivity != null) {
+            meetingApiService = mainActivity.meetingApiService;
+        }
     }
 
     @Override
@@ -63,7 +65,9 @@ public class ListFragment extends Fragment
         super.onHiddenChanged(hidden);
 
         if (!hidden) {
-            setMeetingListView(meetingApiService.getMeetings());
+            if (meetingApiService != null) {
+                setMeetingListView(meetingApiService.getMeetings());
+            }
         }
     }
 
@@ -76,8 +80,10 @@ public class ListFragment extends Fragment
         setFab(view);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
-        setMeetingListView(meetingApiService.getMeetings());
 
+        if (meetingApiService != null) {
+            setMeetingListView(meetingApiService.getMeetings());
+        }
 
         return view;
     }

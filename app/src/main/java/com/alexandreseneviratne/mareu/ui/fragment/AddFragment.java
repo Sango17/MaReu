@@ -3,6 +3,7 @@ package com.alexandreseneviratne.mareu.ui.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,8 @@ public class AddFragment extends Fragment
     private Date setScheduleDate;
     private Time setScheduleTime;
 
+    private ArrayList<Meeting> checkMeetingList = new ArrayList<>();
+
     private Calendar calendar = Calendar.getInstance();
     private final int year = calendar.get(Calendar.YEAR);
     private final int month = calendar.get(Calendar.MONTH);
@@ -77,7 +80,12 @@ public class AddFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         mainActivity = (MainActivity) getActivity();
-        meetingApiService = DI.getService();
+        meetingApiService = mainActivity.meetingApiService;
+
+        if (meetingApiService != null) {
+            checkMeetingList.addAll(meetingApiService.getMeetings());
+        }
+
     }
 
     @Nullable
@@ -220,36 +228,38 @@ public class AddFragment extends Fragment
     }
 
     private void addMeetingProcess() {
-        if (setScheduleTime != null && Utils.isOnOpeningHours(setScheduleTime)) {
-            if (Utils.checkHallAvailability(
+        if (setScheduleDate == null && setScheduleTime == null && meetingSubject.getText().toString().equals("") && participantList.isEmpty()) {
+            Utils.notifyMessage(getContext(), R.string.warning_meeting_empty);
+        } else if (setScheduleTime == null) {
+            Utils.notifyMessage(getContext(), R.string.warning_meeting_opening);
+        } else if (meetingSubject.getText().toString().isEmpty() ||
+                participantList.isEmpty()) {
+            Utils.notifyMessage(getContext(), R.string.warning_subject_participants);
+        } else {
+            if (!Utils.isOnOpeningHours(setScheduleTime)) {
+                Utils.notifyMessage(getContext(), R.string.warning_meeting_opening);
+            } else if (Utils.checkHallAvailability(
                     meetingHall.getSelectedItem().toString(),
                     setScheduleDate,
                     setScheduleTime,
-                    meetingApiService.getMeetings())) {
-                if (meetingSubject.getText().toString().isEmpty() ||
-                        participantList.isEmpty()) {
-                    Utils.notifyMessage(getContext(), R.string.warning_subject_participants);
-                } else {
-                    Meeting newMeeting = new Meeting(
-                            meetingSubject.getText().toString(),
-                            meetingHall.getSelectedItem().toString(),
-                            setScheduleDate,
-                            setScheduleTime,
-                            participantList);
+                    mainActivity.meetingApiService.getMeetings())) {
+                Meeting newMeeting = new Meeting(
+                        meetingSubject.getText().toString(),
+                        meetingHall.getSelectedItem().toString(),
+                        setScheduleDate,
+                        setScheduleTime,
+                        participantList);
 
-                    meetingApiService.addMeeting(newMeeting);
+                mainActivity.removeFragment();
 
-                    mainActivity.removeFragment();
+                mainActivity.meetingApiService.addMeeting(newMeeting);
 
-                    if (mainActivity.mIsDualPane) {
-                        mainActivity.toDetail(meetingApiService.getMeetings().get(0));
-                    }
+                if (mainActivity.mIsDualPane) {
+                    mainActivity.toDetail(meetingApiService.getMeetings().get(0));
                 }
             } else {
                 Utils.notifyMessage(getContext(), R.string.warning_hall_not_free);
             }
-        } else {
-            Utils.notifyMessage(getContext(), R.string.warning_meeting_opening);
         }
     }
 

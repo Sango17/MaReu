@@ -16,6 +16,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.alexandreseneviratne.mareu.model.Date;
+import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.model.Time;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.utils.DeleteParticipantViewAction;
@@ -28,6 +29,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -53,14 +56,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class MeetingInstrumentedTest {
     private MainActivity mActivity;
-    private ViewInteraction listFragmentRecyclerView;
-
 
     private static String SUBJECT_TEST_MEETING_1 = "InstrumentedTest1";
-    private static String SUBJECT_TEST_MEETING_2 = "InstrumentedTest2";
-    private static String SUBJECT_TEST_MEETING_3 = "InstrumentedTest3";
-    private static String SUBJECT_TEST_MEETING_4 = "InstrumentedTest4";
-    private static String SUBJECT_TEST_MEETING_5 = "InstrumentedTest5";
 
     private static String PARTICIPANT_1 = "instrumented1@test.com";
     private static String PARTICIPANT_2 = "instrumented2@test.com";
@@ -71,17 +68,7 @@ public class MeetingInstrumentedTest {
     private static String PARTICIPANT_ERROR_4 = "instrumented@.com";
 
     private Date dateTestMeeting1 = new Date(14, 2, 2020);
-    private Date dateTestMeeting2 = new Date(15, 2, 2020);
 
-    private Time errorTimeTestMeeting1 = new Time(7, 59);
-    private Time errorTimeTestMeeting2 = new Time(19, 16);
-
-    private Time timeTestMeeting1 = new Time(8, 0);
-    private Time timeTestMeeting2 = new Time(19, 15);
-    private Time timeTestMeeting3 = new Time(19, 15);
-
-
-    // onView(withText(R.string.TOAST_STRING)).inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -91,21 +78,14 @@ public class MeetingInstrumentedTest {
         mActivity = mActivityRule.getActivity();
         ViewMatchers.assertThat(mActivity, notNullValue());
 
-        listFragmentRecyclerView = onView(
-                allOf(withId(R.id.list_recycler_view),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container),
-                                        0),
-                                1),
-                        isDisplayed()));
+        ArrayList<String> participant = new ArrayList<>();
+        participant.add("alexandre@gmail.com");
+
+        mActivity.meetingApiService.addMeeting(new Meeting("Hello", "Mario", new Date(dateTestMeeting1.getDay(), dateTestMeeting1.getMonth(), dateTestMeeting1.getYear()), new Time(9, 30), participant));
     }
 
     @Test
-    public void addFragment_addAction_shouldAddMeetingToTheList() {
-        // Check if the meeting reservation list is empty
-        listFragmentRecyclerView.check(matches(hasMinimumChildCount(0)));
-
+    public void addFragment_addAction_alertNoInputAndDateAdded() {
         // Click on the FAB (create meeting button) in order to get the Adding View
         onView(withId(R.id.fab_add)).perform(click());
 
@@ -113,9 +93,37 @@ public class MeetingInstrumentedTest {
         onView(withId(R.id.add_meeting_button)).perform(click());
 
         // Alert Toast - No input
-        onView(withText(R.string.warning_meeting_opening)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(R.string.warning_meeting_empty)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
 
-        // Select the meeting hall
+    @Test
+    public void addFragment_addAction_alertNoTimeAdded() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Select the meeting hall Mario
+        onView(withId(R.id.add_meeting_hall)).perform(click());
+        onView(withText("Mario")).perform(click());
+
+        // Select date of meeting
+        onView(withId(R.id.add_meeting_schedule_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
+        onView(withText("OK")).perform(click());
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        // Alert Toast - Wrong time
+        onView(withText(R.string.warning_meeting_opening)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void addFragment_addAction_alertWrongTimeAdded() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Select the meeting hall Mario
         onView(ViewMatchers.withId(R.id.add_meeting_hall)).perform(click());
         onView(withText("Mario")).perform(click());
 
@@ -125,15 +133,95 @@ public class MeetingInstrumentedTest {
                 .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
         onView(withText("OK")).perform(click());
 
-        // Select time of meeting
+        // Select time of meeting - at 7h00
         onView(withId(R.id.add_meeting_schedule_time)).perform(click());
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
-                .perform(PickerActions.setTime(timeTestMeeting1.getHours(), timeTestMeeting1.getMinutes()));
+                .perform(PickerActions.setTime(7, 0));
+        onView(withText("OK")).perform(click());
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        onView(withId(R.id.add_meeting_subject)).perform(typeText(SUBJECT_TEST_MEETING_1));
+        Espresso.closeSoftKeyboard();
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_1));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        // Alert Toast - Wrong time
+        onView(withText(R.string.warning_meeting_opening)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void addFragment_addAction_alertNoSubjectAdded() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Select the meeting hall Mario
+        onView(ViewMatchers.withId(R.id.add_meeting_hall)).perform(click());
+        onView(withText("Mario")).perform(click());
+
+        // Select date of meeting
+        onView(withId(R.id.add_meeting_schedule_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
+        onView(withText("OK")).perform(click());
+
+        // Select time of meeting - at 7h00
+        onView(withId(R.id.add_meeting_schedule_time)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                .perform(PickerActions.setTime(8, 0));
+        onView(withText("OK")).perform(click());
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        // Alert Toast - Wrong time
+        onView(withText(R.string.warning_subject_participants)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void addFragment_addAction_alertNoParticipantAdded() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Select the meeting hall Mario
+        onView(ViewMatchers.withId(R.id.add_meeting_hall)).perform(click());
+        onView(withText("Mario")).perform(click());
+
+        // Select date of meeting
+        onView(withId(R.id.add_meeting_schedule_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
+        onView(withText("OK")).perform(click());
+
+        // Select time of meeting - at 7h00
+        onView(withId(R.id.add_meeting_schedule_time)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                .perform(PickerActions.setTime(8, 0));
         onView(withText("OK")).perform(click());
 
         // Add a topic
         onView(withId(R.id.add_meeting_subject)).perform(typeText(SUBJECT_TEST_MEETING_1));
         Espresso.closeSoftKeyboard();
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        // Alert Toast - Wrong time
+        onView(withText(R.string.warning_subject_participants)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void addFragment_addAction_AddAndSuppressParticipant() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
 
         // Add one participant
         onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_1));
@@ -160,85 +248,131 @@ public class MeetingInstrumentedTest {
         onView(withId(R.id.add_meeting_participants_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteParticipantViewAction()));
         // Checking if there are still 2 participants
         onView(withId(R.id.add_meeting_participants_recycler_view)).check(matches(hasMinimumChildCount(2)));
+    }
+
+    @Test
+    public void addFragment_addAction_checkParticipantValidity() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_1));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+        // Alert Toast - Not valid email
+        onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_2));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+        // Alert Toast - Not valid email
+        onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_3));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+        // Alert Toast - Not valid email
+        onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_4));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+        // Alert Toast - Not valid email
+        onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void addFragment_addAction_shouldNotAddMeetingAtSameTimeToTheList() {
+        // Click on the FAB (create meeting button) in order to get the Adding View
+        onView(withId(R.id.fab_add)).perform(click());
+
+        // Select the meeting hall Mario
+        onView(withId(R.id.add_meeting_hall)).perform(click());
+        onView(withText("Mario")).perform(click());
+
+        // Select date of meeting
+        onView(withId(R.id.add_meeting_schedule_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
+        onView(withText("OK")).perform(click());
+
+        // Select time of meeting - at 9h00
+        onView(withId(R.id.add_meeting_schedule_time)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                .perform(PickerActions.setTime(9, 30));
+        onView(withText("OK")).perform(click());
+
+        // Add a topic
+        onView(withId(R.id.add_meeting_subject)).perform(typeText(SUBJECT_TEST_MEETING_1));
+        Espresso.closeSoftKeyboard();
+
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_1));
+        Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
+        onView(withId(R.id.add_meeting_participants_button)).perform(click());
+
+        // Click on the create meeting reservation button
+        onView(withId(R.id.add_meeting_button)).perform(click());
+
+        // Alert Toast - Already reserved
+        onView(withText(R.string.warning_hall_not_free)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+        // Select time of meeting - at 8h00
+        onView(withId(R.id.add_meeting_schedule_time)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                .perform(PickerActions.setTime(9, 0));
+        onView(withText("OK")).perform(click());
 
         // Click on the create meeting reservation button
         onView(withId(R.id.add_meeting_button)).perform(click());
 
         // Check if the meeting is added to the meeting reservation list
-        listFragmentRecyclerView.check(matches(hasMinimumChildCount(1)));
-
-
-        // Testing
-        // Click on the FAB (create meeting button) in order to get the Adding View
-        onView(ViewMatchers.withId(R.id.fab_add)).perform(ViewActions.click());
-
-        // Click on the create meeting reservation button
-        onView(withId(R.id.add_meeting_button)).perform(click());
-        // A toast is popping up to tell
-        onView(withText(R.string.warning_meeting_opening)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
-
+        onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(1)));
     }
 
-    /*@Test
-    public void addFragment_addAction_shouldAddASecondMeetingToTheList() {
+    @Test
+    public void addFragment_addAction_shouldAddMeetingToTheList() {
         // Click on the FAB (create meeting button) in order to get the Adding View
-        onView(ViewMatchers.withId(R.id.fab_add)).perform(ViewActions.click());
+        onView(withId(R.id.fab_add)).perform(click());
 
-        // Select the meeting hall
-        onView(ViewMatchers.withId(R.id.add_meeting_hall)).perform(ViewActions.click());
+        // Select the meeting hall Mario
+        onView(withId(R.id.add_meeting_hall)).perform(click());
         onView(withText("Mario")).perform(click());
 
         // Select date of meeting
         onView(withId(R.id.add_meeting_schedule_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2020, 2, 16));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(dateTestMeeting1.getYear(), dateTestMeeting1.getMonth(), dateTestMeeting1.getDay()));
         onView(withText("OK")).perform(click());
 
-        // Select time of meeting
+        // Select time of meeting - at 8h00
         onView(withId(R.id.add_meeting_schedule_time)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(9, 30));
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                .perform(PickerActions.setTime(8, 0));
         onView(withText("OK")).perform(click());
 
-        // Add meeting's topic
-        onView(withId(R.id.add_meeting_subject)).perform(typeText("InstrumentedTest2"));
+        // Add a topic
+        onView(withId(R.id.add_meeting_subject)).perform(typeText(SUBJECT_TEST_MEETING_1));
         Espresso.closeSoftKeyboard();
 
-        // Add meeting's participant
-        onView(withId(R.id.add_meeting_participants)).perform(typeText("instrumented2@test.com"));
+        // Add one participant
+        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_1));
         Espresso.closeSoftKeyboard();
+        // Confirming by click on the + button
         onView(withId(R.id.add_meeting_participants_button)).perform(click());
 
-        // Click on the create button
+        // Click on the create meeting reservation button
         onView(withId(R.id.add_meeting_button)).perform(click());
 
-        // If the meeting is added to the list
-        listFragmentRecyclerView.check(matches(hasMinimumChildCount(1)));
-
-    }
-
-    @Test
-    public void addFragment_goToDetailAction_shouldMeetingMeetingDetail() {
-        addFragment_addAction_shouldAddMeetingToTheList();
-        listFragmentRecyclerView.perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.detail_meeting_hall)).check(matches(withText("Mario")));
-    }*/
-
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        // Check if the meeting is added to the meeting reservation list
+        onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(2)));
     }
 }
