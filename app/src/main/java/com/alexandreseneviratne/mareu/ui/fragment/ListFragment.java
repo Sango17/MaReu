@@ -78,6 +78,7 @@ public class ListFragment extends Fragment
         recyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
         setMeetingListView(meetingApiService.getMeetings());
 
+
         return view;
     }
 

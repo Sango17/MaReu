@@ -239,7 +239,6 @@ public class AddFragment extends Fragment
 
                     meetingApiService.addMeeting(newMeeting);
 
-                    mainActivity.toList();
                     mainActivity.removeFragment();
 
                     if (mainActivity.mIsDualPane) {
