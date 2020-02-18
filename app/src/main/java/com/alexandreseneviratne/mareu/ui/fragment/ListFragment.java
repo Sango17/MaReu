@@ -94,10 +94,10 @@ public class ListFragment extends Fragment
      * @param view ListFragment's view
      */
     private void setToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolBarTitle = (TextView) view.findViewById(R.id.toolbar_title);
-        toolBarFilter = (ImageView) view.findViewById(R.id.navigate_filter);
-        toolBarFilterClose = (ImageView) view.findViewById(R.id.navigate_filter_close);
+        toolbar = view.findViewById(R.id.toolbar);
+        toolBarTitle = view.findViewById(R.id.toolbar_title);
+        toolBarFilter = view.findViewById(R.id.navigate_filter);
+        toolBarFilterClose = view.findViewById(R.id.navigate_filter_close);
 
         // Get the actionbar
         if (mainActivity != null) {

@@ -56,8 +56,8 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            participantMail = (TextView) itemView.findViewById(R.id.item_info);
-            participantTrash = (ImageView) itemView.findViewById(R.id.item_trash);
+            participantMail = itemView.findViewById(R.id.item_info);
+            participantTrash = itemView.findViewById(R.id.item_trash);
         }
     }
 }

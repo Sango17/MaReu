@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
-        fragmentDualPaneContainer = (FrameLayout) findViewById(R.id.fragment_dual_pane_container);
+        fragmentContainer = findViewById(R.id.fragment_container);
+        fragmentDualPaneContainer = findViewById(R.id.fragment_dual_pane_container);
         mIsDualPane = fragmentDualPaneContainer.getVisibility() == View.VISIBLE;
         if (fragmentContainer != null) {
             // However, if we're being restored from a previous state,
@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        meetingApiService = DI.getService();
+        if (meetingApiService == null) {
+            meetingApiService = DI.getService();
+        }
     }
 
     /**

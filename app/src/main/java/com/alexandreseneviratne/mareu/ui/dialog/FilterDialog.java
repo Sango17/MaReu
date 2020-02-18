@@ -1,7 +1,6 @@
 package com.alexandreseneviratne.mareu.ui.dialog;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ public class FilterDialog extends DialogFragment {
 
         if (selectedDate != null) {
             this.selectedDate = selectedDate;
-            Log.d("Alex Test", String.valueOf(selectedDate.getDay()));
         }
     }
 
@@ -60,10 +58,10 @@ public class FilterDialog extends DialogFragment {
      * @param view FilterDialog's view
      */
     private void setView(View view) {
-        titleTextView = (TextView) view.findViewById(R.id.dialog_filter_title);
-        spinner = (Spinner) view.findViewById(R.id.dialog_filter_spinner);
-        acceptButton = (Button) view.findViewById(R.id.dialog_filter_accept);
-        cancelButton = (Button) view.findViewById(R.id.dialog_filter_cancel);
+        titleTextView = view.findViewById(R.id.dialog_filter_title);
+        spinner = view.findViewById(R.id.dialog_filter_spinner);
+        acceptButton = view.findViewById(R.id.dialog_filter_accept);
+        cancelButton = view.findViewById(R.id.dialog_filter_cancel);
 
         titleTextView.setText(FilterHelper.setFilterDialogTitle(getContext(), filterType));
     }
@@ -73,10 +71,10 @@ public class FilterDialog extends DialogFragment {
      *
      * @param filterType (ex: FILTER_TYPE_DATE or FILTER_TYPE_HALL)
      */
-    private void setSpinner(String filterType){
+    private void setSpinner(String filterType) {
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> meetingHallAdapter = ArrayAdapter.createFromResource(getContext(),
-                (filterType.equals(FilterHelper.FILTER_TYPE_HALL))? R.array.meeting_hall : R.array.meeting_schedule, android.R.layout.simple_spinner_item);
+                (filterType.equals(FilterHelper.FILTER_TYPE_HALL)) ? R.array.meeting_hall : R.array.meeting_schedule, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         meetingHallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner

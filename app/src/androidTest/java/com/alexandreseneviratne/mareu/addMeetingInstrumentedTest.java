@@ -1,14 +1,9 @@
 package com.alexandreseneviratne.mareu;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -21,10 +16,7 @@ import com.alexandreseneviratne.mareu.model.Time;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.utils.DeleteParticipantViewAction;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,7 +35,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -54,7 +45,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MeetingInstrumentedTest {
+public class addMeetingInstrumentedTest {
     private MainActivity mActivity;
 
     private static String SUBJECT_TEST_MEETING_1 = "InstrumentedTest1";
@@ -76,12 +67,25 @@ public class MeetingInstrumentedTest {
     @Before
     public void setup() {
         mActivity = mActivityRule.getActivity();
-        ViewMatchers.assertThat(mActivity, notNullValue());
+        assertThat(mActivity, notNullValue());
 
+        // Creating a participant list
         ArrayList<String> participant = new ArrayList<>();
         participant.add("alexandre@gmail.com");
 
-        mActivity.meetingApiService.addMeeting(new Meeting("Hello", "Mario", new Date(dateTestMeeting1.getDay(), dateTestMeeting1.getMonth(), dateTestMeeting1.getYear()), new Time(9, 30), participant));
+        // Creating a test Meeting reservation
+        Meeting testMeetingReservation = new Meeting(
+                "Hello",
+                "Mario",
+                new Date(
+                        dateTestMeeting1.getDay(),
+                        dateTestMeeting1.getMonth(),
+                        dateTestMeeting1.getYear()
+                ),
+                new Time(9, 30), participant);
+
+        // Adding testMeetingReservation to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation);
     }
 
     @Test
@@ -333,9 +337,6 @@ public class MeetingInstrumentedTest {
 
         // Click on the create meeting reservation button
         onView(withId(R.id.add_meeting_button)).perform(click());
-
-        // Check if the meeting is added to the meeting reservation list
-        onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(1)));
     }
 
     @Test

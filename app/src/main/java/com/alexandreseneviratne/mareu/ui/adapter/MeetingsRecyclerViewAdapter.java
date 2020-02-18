@@ -85,10 +85,10 @@ public class MeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MeetingsRe
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            itemContainer = (LinearLayout) itemView.findViewById(R.id.item_container);
-            titleInfo = (TextView) itemView.findViewById(R.id.item_main_info);
-            textInfo = (TextView) itemView.findViewById(R.id.item_contact_info);
-            trashButton = (ImageView) itemView.findViewById(R.id.item_trash);
+            itemContainer = itemView.findViewById(R.id.item_container);
+            titleInfo = itemView.findViewById(R.id.item_main_info);
+            textInfo = itemView.findViewById(R.id.item_contact_info);
+            trashButton = itemView.findViewById(R.id.item_trash);
         }
     }
 }

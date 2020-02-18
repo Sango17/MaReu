@@ -3,7 +3,6 @@ package com.alexandreseneviratne.mareu.ui.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.model.Time;
 import com.alexandreseneviratne.mareu.utils.DateHelper;
 import com.alexandreseneviratne.mareu.utils.Utils;
-import com.alexandreseneviratne.mareu.di.DI;
 import com.alexandreseneviratne.mareu.service.MeetingApiService;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
 import com.alexandreseneviratne.mareu.ui.listener.OnParticipantListener;
@@ -106,8 +104,8 @@ public class AddFragment extends Fragment
      * @param view AddFragment's view
      */
     private void setToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolBarBack = (ImageView) view.findViewById(R.id.navigate_up);
+        toolbar = view.findViewById(R.id.toolbar);
+        toolBarBack = view.findViewById(R.id.navigate_up);
         // Get the actionbar
         if (mainActivity != null) {
             mainActivity.setSupportActionBar(toolbar);
@@ -128,14 +126,14 @@ public class AddFragment extends Fragment
      * @param view AddFragment's view
      */
     private void setView(View view) {
-        meetingHall = (Spinner) view.findViewById(R.id.add_meeting_hall);
-        meetingScheduleDate = (TextView) view.findViewById(R.id.add_meeting_schedule_date);
-        meetingScheduleTime = (TextView) view.findViewById(R.id.add_meeting_schedule_time);
-        meetingSubject = (EditText) view.findViewById(R.id.add_meeting_subject);
-        meetingParticipants = (EditText) view.findViewById(R.id.add_meeting_participants);
-        meetingAddParticipant = (ImageView) view.findViewById(R.id.add_meeting_participants_button);
-        meetingParticipantRecyclerView = (RecyclerView) view.findViewById(R.id.add_meeting_participants_recycler_view);
-        meetingAddButton = (Button) view.findViewById(R.id.add_meeting_button);
+        meetingHall = view.findViewById(R.id.add_meeting_hall);
+        meetingScheduleDate = view.findViewById(R.id.add_meeting_schedule_date);
+        meetingScheduleTime = view.findViewById(R.id.add_meeting_schedule_time);
+        meetingSubject = view.findViewById(R.id.add_meeting_subject);
+        meetingParticipants = view.findViewById(R.id.add_meeting_participants);
+        meetingAddParticipant = view.findViewById(R.id.add_meeting_participants_button);
+        meetingParticipantRecyclerView = view.findViewById(R.id.add_meeting_participants_recycler_view);
+        meetingAddButton = view.findViewById(R.id.add_meeting_button);
 
         if (mainActivity.mIsDualPane) {
             toolBarBack.setVisibility(View.GONE);
@@ -150,6 +148,11 @@ public class AddFragment extends Fragment
         setMeetingParticipantList(participantList);
     }
 
+    /**
+     * Set AddFragment's view
+     *
+     * @param participantList list of participants
+     */
     private void setMeetingParticipantList(ArrayList<String> participantList) {
         adapter = new ParticipantRecyclerViewAdapter(participantList, this);
         meetingParticipantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -188,6 +191,9 @@ public class AddFragment extends Fragment
         setDateAndTimeListener();
     }
 
+    /**
+     * Set listener for date and time pickers
+     */
     private void setDateAndTimeListener() {
         meetingScheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +233,9 @@ public class AddFragment extends Fragment
         });
     }
 
+    /**
+     * Adding meeting reservation button action
+     */
     private void addMeetingProcess() {
         if (setScheduleDate == null && setScheduleTime == null && meetingSubject.getText().toString().equals("") && participantList.isEmpty()) {
             Utils.notifyMessage(getContext(), R.string.warning_meeting_empty);
@@ -250,9 +259,9 @@ public class AddFragment extends Fragment
                         setScheduleTime,
                         participantList);
 
-                mainActivity.removeFragment();
-
                 mainActivity.meetingApiService.addMeeting(newMeeting);
+
+                mainActivity.removeFragment();
 
                 if (mainActivity.mIsDualPane) {
                     mainActivity.toDetail(meetingApiService.getMeetings().get(0));

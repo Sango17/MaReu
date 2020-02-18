@@ -65,8 +65,8 @@ public class DetailFragment extends Fragment {
      * @param view DetailFragment's view
      */
     private void setToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolBarBack = (ImageView) view.findViewById(R.id.navigate_up);
+        toolbar = view.findViewById(R.id.toolbar);
+        toolBarBack = view.findViewById(R.id.navigate_up);
         if (mainActivity.mIsDualPane) {
             toolBarBack.setVisibility(View.GONE);
         }
