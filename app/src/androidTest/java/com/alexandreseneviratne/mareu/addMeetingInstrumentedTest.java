@@ -14,7 +14,7 @@ import com.alexandreseneviratne.mareu.model.Date;
 import com.alexandreseneviratne.mareu.model.Meeting;
 import com.alexandreseneviratne.mareu.model.Time;
 import com.alexandreseneviratne.mareu.ui.MainActivity;
-import com.alexandreseneviratne.mareu.utils.DeleteParticipantViewAction;
+import com.alexandreseneviratne.mareu.utils.DeleteItemViewAction;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -54,15 +55,17 @@ public class addMeetingInstrumentedTest {
     private static String PARTICIPANT_2 = "instrumented2@test.com";
     private static String PARTICIPANT_3 = "instrumented3@test.com";
     private static String PARTICIPANT_ERROR_1 = "instrumentedtest.com";
-    private static String PARTICIPANT_ERROR_2 = "@test.com";
+    private static String PARTICIPANT_ERROR_2 = "@testcom";
     private static String PARTICIPANT_ERROR_3 = "instrumented@";
     private static String PARTICIPANT_ERROR_4 = "instrumented@.com";
 
+    private Meeting testMeetingReservation;
     private Date dateTestMeeting1 = new Date(14, 2, 2020);
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
+
 
     @Before
     public void setup() {
@@ -74,7 +77,7 @@ public class addMeetingInstrumentedTest {
         participant.add("alexandre@gmail.com");
 
         // Creating a test Meeting reservation
-        Meeting testMeetingReservation = new Meeting(
+        testMeetingReservation = new Meeting(
                 "Hello",
                 "Mario",
                 new Date(
@@ -84,8 +87,8 @@ public class addMeetingInstrumentedTest {
                 ),
                 new Time(9, 30), participant);
 
-        // Adding testMeetingReservation to the main list of meeting's reservation
-        mActivity.meetingApiService.addMeeting(testMeetingReservation);
+        // Clean the meeting list for each test
+        mActivity.meetingApiService.getMeetings().clear();
     }
 
     @Test
@@ -249,13 +252,16 @@ public class addMeetingInstrumentedTest {
         onView(withId(R.id.add_meeting_participants_recycler_view)).check(matches(hasMinimumChildCount(3)));
 
         // Suppress one participant
-        onView(withId(R.id.add_meeting_participants_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteParticipantViewAction()));
+        onView(withId(R.id.add_meeting_participants_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteItemViewAction()));
         // Checking if there are still 2 participants
         onView(withId(R.id.add_meeting_participants_recycler_view)).check(matches(hasMinimumChildCount(2)));
     }
 
     @Test
     public void addFragment_addAction_checkParticipantValidity() {
+        // Adding testMeetingReservation to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation);
+
         // Click on the FAB (create meeting button) in order to get the Adding View
         onView(withId(R.id.fab_add)).perform(click());
 
@@ -267,8 +273,9 @@ public class addMeetingInstrumentedTest {
         // Alert Toast - Not valid email
         onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
 
+
         // Add one participant
-        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_2));
+        onView(withId(R.id.add_meeting_participants)).perform(clearText(),typeText(PARTICIPANT_ERROR_2));
         Espresso.closeSoftKeyboard();
         // Confirming by click on the + button
         onView(withId(R.id.add_meeting_participants_button)).perform(click());
@@ -276,7 +283,7 @@ public class addMeetingInstrumentedTest {
         onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         // Add one participant
-        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_3));
+        onView(withId(R.id.add_meeting_participants)).perform(clearText(), typeText(PARTICIPANT_ERROR_3));
         Espresso.closeSoftKeyboard();
         // Confirming by click on the + button
         onView(withId(R.id.add_meeting_participants_button)).perform(click());
@@ -284,7 +291,7 @@ public class addMeetingInstrumentedTest {
         onView(withText(R.string.warning_not_email)).inRoot(withDecorView(not(is(mActivity.getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         // Add one participant
-        onView(withId(R.id.add_meeting_participants)).perform(typeText(PARTICIPANT_ERROR_4));
+        onView(withId(R.id.add_meeting_participants)).perform(clearText(), typeText(PARTICIPANT_ERROR_4));
         Espresso.closeSoftKeyboard();
         // Confirming by click on the + button
         onView(withId(R.id.add_meeting_participants_button)).perform(click());
@@ -294,6 +301,9 @@ public class addMeetingInstrumentedTest {
 
     @Test
     public void addFragment_addAction_shouldNotAddMeetingAtSameTimeToTheList() {
+        // Adding testMeetingReservation to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation);
+
         // Click on the FAB (create meeting button) in order to get the Adding View
         onView(withId(R.id.fab_add)).perform(click());
 
@@ -341,12 +351,15 @@ public class addMeetingInstrumentedTest {
 
     @Test
     public void addFragment_addAction_shouldAddMeetingToTheList() {
+        // Adding testMeetingReservation to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation);
+
         // Click on the FAB (create meeting button) in order to get the Adding View
         onView(withId(R.id.fab_add)).perform(click());
 
-        // Select the meeting hall Mario
+        // Select the meeting hall Peach
         onView(withId(R.id.add_meeting_hall)).perform(click());
-        onView(withText("Mario")).perform(click());
+        onView(withText("Peach")).perform(click());
 
         // Select date of meeting
         onView(withId(R.id.add_meeting_schedule_date)).perform(click());

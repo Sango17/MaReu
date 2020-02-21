@@ -44,14 +44,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
 
+        refresh();
+    }
+
+    public void refresh() {
         if (meetingApiService == null) {
             meetingApiService = DI.getService();
         }
-    }
+    }*/
 
     /**
      * Set ListFragment
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         listFragment.setArguments(getIntent().getExtras());
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.add(R.id.fragment_container, listFragment);
+        transaction.replace(R.id.fragment_container, listFragment);
         transaction.commit();
 
         // Set DetailFragment to fragment_dual_pane_container

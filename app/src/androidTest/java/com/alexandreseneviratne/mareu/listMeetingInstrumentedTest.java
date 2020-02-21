@@ -42,6 +42,11 @@ import static org.hamcrest.core.IsNull.notNullValue;
 public class listMeetingInstrumentedTest {
     private MainActivity mActivity;
 
+    private Meeting testMeetingReservation1;
+    private Meeting testMeetingReservation2;
+    private Meeting testMeetingReservation3;
+    private Meeting testMeetingReservation4;
+
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -56,7 +61,7 @@ public class listMeetingInstrumentedTest {
         participant.add("alexandre@gmail.com");
 
         // Creating a test Meeting reservation
-        Meeting testMeetingReservation1 = new Meeting(
+        testMeetingReservation1 = new Meeting(
                 "Hello",
                 "Mario",
                 new Date(
@@ -67,7 +72,7 @@ public class listMeetingInstrumentedTest {
                 new Time(9, 30), participant);
 
         // Creating a test Meeting reservation
-        Meeting testMeetingReservation2 = new Meeting(
+        testMeetingReservation2 = new Meeting(
                 "Hello",
                 "Peach",
                 new Date(
@@ -78,7 +83,7 @@ public class listMeetingInstrumentedTest {
                 new Time(10, 30), participant);
 
         // Creating a test Meeting reservation
-        Meeting testMeetingReservation3 = new Meeting(
+        testMeetingReservation3 = new Meeting(
                 "Hello",
                 "Mario",
                 new Date(
@@ -89,7 +94,7 @@ public class listMeetingInstrumentedTest {
                 new Time(10, 30), participant);
 
         // Creating a test Meeting reservation
-        Meeting testMeetingReservation4 = new Meeting(
+        testMeetingReservation4 = new Meeting(
                 "Hello",
                 "Peach",
                 new Date(
@@ -99,23 +104,31 @@ public class listMeetingInstrumentedTest {
                 ),
                 new Time(9, 30), participant);
 
+        // Clean the list of meeting for each test
+        mActivity.meetingApiService.getMeetings().clear();
+        mActivity.toList();
+    }
+
+    @Test
+    public void listFragment_showList_showMeeting() {
         // Adding testMeetingReservations to the main list of meeting's reservation
         mActivity.meetingApiService.addMeeting(testMeetingReservation1);
         mActivity.meetingApiService.addMeeting(testMeetingReservation2);
         mActivity.meetingApiService.addMeeting(testMeetingReservation3);
         mActivity.meetingApiService.addMeeting(testMeetingReservation4);
 
-        mActivity.toList();
-    }
-
-    @Test
-    public void listFragment_showList_showMeeting() {
         // Check if there are 4 meeting reservations in the list
         onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(4)));
     }
 
     @Test
     public void listFragment_filterAction_showMeetingFilteredByDate() {
+        // Adding testMeetingReservations to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation1);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation2);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation3);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation4);
+
         // Check if there are 4 meeting reservations in the list
         onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(4)));
 
@@ -150,6 +163,12 @@ public class listMeetingInstrumentedTest {
 
     @Test
     public void listFragment_filterAction_showMeetingFilteredByHall() {
+        // Adding testMeetingReservations to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation1);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation2);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation3);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation4);
+
         // Check if there are 4 meeting reservations in the list
         onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(4)));
 
@@ -173,6 +192,12 @@ public class listMeetingInstrumentedTest {
 
     @Test
     public void listFragment_deleteAction_deleteMeetingFromList() {
+        // Adding testMeetingReservations to the main list of meeting's reservation
+        mActivity.meetingApiService.addMeeting(testMeetingReservation1);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation2);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation3);
+        mActivity.meetingApiService.addMeeting(testMeetingReservation4);
+
         // Check if there are 4 meeting reservations in the list
         onView(withId(R.id.list_recycler_view)).check(matches(hasMinimumChildCount(4)));
 

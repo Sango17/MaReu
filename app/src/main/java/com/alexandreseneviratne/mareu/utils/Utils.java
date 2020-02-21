@@ -28,7 +28,7 @@ public class Utils {
      * @return Boolean true if its available, false if it's not
      */
     public static Boolean checkHallAvailability(String hall, Date selectedDate, Time selectedTime, List<Meeting> meetings) {
-        if (!meetings.isEmpty()) {
+        if (!meetings.isEmpty() && meetings != null) {
             for (Meeting meeting : meetings) {
                 if (hall.equals(meeting.getHall()) && isScheduleAvailable(selectedTime, selectedDate, meeting.getScheduleTime(), meeting.getScheduleDate())) {
                     return true;

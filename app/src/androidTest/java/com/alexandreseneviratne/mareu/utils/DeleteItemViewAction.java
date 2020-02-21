@@ -12,7 +12,7 @@ import org.hamcrest.Matcher;
 /**
  * Created by Alexandre SENEVIRATNE on 2/13/2020.
  */
-public class DeleteParticipantViewAction implements ViewAction {
+public class DeleteItemViewAction implements ViewAction {
     @Override
     public Matcher<View> getConstraints() {
         return null;

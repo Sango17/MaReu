@@ -201,7 +201,7 @@ public class AddFragment extends Fragment
                 final DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        setScheduleDate = new Date(dayOfMonth, month, year);
+                        setScheduleDate = new Date(dayOfMonth, month + 1, year);
                         meetingScheduleDate.setText(
                                 DateHelper.setDateToString(
                                         mainActivity.getApplicationContext(),
@@ -264,6 +264,7 @@ public class AddFragment extends Fragment
                 mainActivity.removeFragment();
 
                 if (mainActivity.mIsDualPane) {
+                    mainActivity.toList();
                     mainActivity.toDetail(meetingApiService.getMeetings().get(0));
                 }
             } else {

@@ -40,7 +40,7 @@ public class detailMeetingInstrumentedTest {
     private static int MEETING_YEAR = 2020;
     private static int MEETING_MINUTE = 30;
     private static int MEETING_HOUR = 9;
-    private static String MEETING_PARTICIPANT = "alexandre@gail.com";
+    private static String MEETING_PARTICIPANT = "alexandre@gmail.com";
 
     private Date dateTestMeeting1 = new Date(MEETING_DAY, MEETING_MONTH, MEETING_YEAR);
 
@@ -87,7 +87,7 @@ public class detailMeetingInstrumentedTest {
         // Click on the first and only
         onView(withId(R.id.list_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        // Check Meeting detail's date
+        // Check Meeting detail's date (14/02/2020)
         onView(withId(R.id.detail_meeting_schedule_date))
                 .check(matches(withText(DateHelper.setDateToString(mActivity.getApplicationContext(), MEETING_DAY, MEETING_MONTH, MEETING_YEAR))));
     }
@@ -98,7 +98,7 @@ public class detailMeetingInstrumentedTest {
         onView(withId(R.id.list_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         // Check Meeting detail's time
-        onView(withId(R.id.detail_meeting_schedule_date))
+        onView(withId(R.id.detail_meeting_schedule_time))
                 .check(matches(withText(DateHelper.setTimetoString(mActivity.getApplicationContext(),MEETING_HOUR, MEETING_MINUTE))));
     }
 
@@ -108,12 +108,12 @@ public class detailMeetingInstrumentedTest {
         onView(withId(R.id.list_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         // Check Meeting detail's subject
-        onView(withId(R.id.detail_meeting_schedule_time))
+        onView(withId(R.id.detail_meeting_subject))
                 .check(matches(withText(MEETING_SUBJECT)));
     }
 
     @Test
-    public void detailMeeting_checkParticipant_showMeetingParticipant() {
+    public void  detailMeeting_checkParticipant_showMeetingParticipant() {
         // Click on the first and only
         onView(withId(R.id.list_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 

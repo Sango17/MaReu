@@ -81,7 +81,7 @@ public class MainFilterDialog extends DialogFragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         getDialog().dismiss();
 
-                        Date setScheduleDate = new Date(dayOfMonth, month, year);
+                        Date setScheduleDate = new Date(dayOfMonth, month + 1, year);
 
                         FilterDialog dialog = new FilterDialog(FilterHelper.FILTER_TYPE_DATE, mListener, setScheduleDate);
                         if (getFragmentManager() != null) {
