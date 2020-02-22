@@ -34,3 +34,7 @@ git clone git@github.com:Sango17/MaReu.git
 * Affichage de l'heure de début de la réunion
 * Affichage sujet de la réunion
 * Affichage des participants de la réunion
+
+## Format tablette
+| ![](images/add_tab.png) | ![](images/detail_tab.png) |
+|:---:|:---:|
